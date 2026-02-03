@@ -19,10 +19,10 @@ const experienceTimeline: DisplayTimelineItem[] = [
   {
     timelineType: 'work',
     name: 'Forward·Inc',
-    title: 'Student Consultant 🤵🏽‍♂️',
+    title: 'Student AI Consultant 🤵🏽‍♂️',
     link: 'https://www.newcomersforward.com/get-involved/',
     summaryPoints: [
-      '📁 Providing research, analysis, and practical recommendations for a mission-driven organization. Review programs, analyze data, and support strategic planning efforts. Collaborate with team members to improve operations, strengthen services, and support organizational goals.'
+      '📁 Advising mission-driven organization on AI implementation strategy by conducting research, analyzing operational data to identify automation and optimization opportunities, evaluating emerging AI tools and platforms, and delivering data-driven recommendations and strategic roadmaps that align AI adoption with organizational goals and service delivery improvements make it shorter.'
     ],
     dateRange: 'Jan 2026 - Present'
   },
