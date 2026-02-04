@@ -1,5 +1,6 @@
 import React from 'react';
 import './Achievements.css';
+
 const achievements = [
   {
     heading: 'Academic Distinctions',
