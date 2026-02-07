@@ -17,6 +17,16 @@ const experienceTimeline: DisplayTimelineItem[] = [
     dateRange: 'Feb 2026 - Present'
   },
   {
+    timelineType: 'research',
+    name: 'MONKEE ETHZ X ETH Robotics Club ',
+    title: 'Robotic Perception Engineer 👀',
+    link: 'https://www.monkee.ethz.ch/',
+    summaryPoints: [
+      '🧪 Conducting research and applied development on perception and computer vision systems for \textit{Gibby}, a tree-climbing research robot. The vision stack supports environment perception, branch and terrain understanding, localization, and autonomous navigation in complex, unstructured forest environments'
+    ],
+    dateRange: 'Feb 2026 - Present'
+  },
+  {
     timelineType: 'work',
     name: 'Forward·Inc',
     title: 'Student Consultant 🤵🏽‍♂️',
