@@ -11,8 +11,8 @@ const experienceTimeline: DisplayTimelineItem[] = [
     title: 'Visiting Student Researcher 👨🏽‍🔬',
     link: 'https://www.epfl.ch/labs/lts4/',
     summaryPoints: [
-      '🧪 Conducting research on scalable cell-graph representations for digital pathology, focusing on batch-effect–robust graph construction, edge enhancement with tissue context, and graph diversity to improve generalization',
-      'Investigating multimodal foundation-model approaches that combine cell graphs and vision models, exploring efficient fine-tuning strategies and curated large-scale datasets for robust zero-shot and transfer learning'
+      '🧪 Conducting research on scalable cell-graph representations for digital pathology, focusing on batch-effect–robust graph construction, edge enhancement with tissue context, and graph diversity to improve generalization.',
+      'Investigating multimodal foundation-model approaches that combine cell graphs and vision models, exploring efficient fine-tuning strategies and curated large-scale datasets for robust zero-shot and transfer learning.'
     ],
     dateRange: 'Feb 2026 - Present'
   },
@@ -22,7 +22,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
     title: 'Robotic Perception Engineer 👀',
     link: 'https://www.monkee.ethz.ch/',
     summaryPoints: [
-      '🧪 Conducting research and applied development on perception and computer vision systems for \textit{Gibby}, a tree-climbing research robot. The vision stack supports environment perception, branch and terrain understanding, localization, and autonomous navigation in complex, unstructured forest environments'
+      '🧪 Conducting research and applied development on perception and computer vision systems for Gibby, a tree-climbing research robot. The vision stack supports environment perception, branch and terrain understanding, localization, and autonomous navigation in complex, unstructured forest environments.'
     ],
     dateRange: 'Feb 2026 - Present'
   },
