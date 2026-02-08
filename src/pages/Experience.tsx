@@ -18,7 +18,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
   },
   {
     timelineType: 'research',
-    name: 'MONKEE ETHZ X ETH Robotics Club (ETHRC)',
+    name: 'MONKEE ETHZ x ETH Robotics Club (ETHRC)',
     title: 'Robotic Perception Engineer 👀',
     link: 'https://www.monkee.ethz.ch/',
     summaryPoints: [
