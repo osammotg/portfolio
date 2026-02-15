@@ -27,16 +27,6 @@ const experienceTimeline: DisplayTimelineItem[] = [
     dateRange: 'Feb 2026 - Present'
   },
   {
-    timelineType: 'work',
-    name: 'Forward·Inc',
-    title: 'Student Consultant 🤵🏽‍♂️',
-    link: 'https://www.newcomersforward.com/get-involved/',
-    summaryPoints: [
-      '📁 Providing research, analysis, and practical recommendations for a mission-driven organization. Review programs, analyze data, and support strategic planning efforts. Collaborate with team members to improve operations, strengthen services, and support organizational goals.'
-    ],
-    dateRange: 'Jan 2026 - Present'
-  },
-  {
     timelineType: 'teaching',
     name: 'ETH Zürich D-USYS',
     title: 'Teaching Assistant 🧑🏽‍🏫',
@@ -61,6 +51,16 @@ const experienceTimeline: DisplayTimelineItem[] = [
     dateRange: 'Nov 2025 - Present'
   },
   {
+    timelineType: 'work',
+    name: 'Forward·Inc',
+    title: 'Student Consultant 🤵🏽‍♂️',
+    link: 'https://www.newcomersforward.com/get-involved/',
+    summaryPoints: [
+      '📁 Providing research, analysis, and practical recommendations for a mission-driven organization. Review programs, analyze data, and support strategic planning efforts. Collaborate with team members to improve operations, strengthen services, and support organizational goals.'
+    ],
+    dateRange: 'Jan 2026 - Mar 2026'
+  },
+  {
     timelineType: 'teaching',
     name: 'UZH Department of Informatics',
     title: 'Head Teaching Assistant 🧑🏽‍🏫',
@@ -80,7 +80,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
       'Conducted data-driven research on ball recovery in professional football, including exploration of machine learning applications in professional football.',
       'Analyzed large-scale educational data to evaluate the effects of Generative AI tools on student outcomes in programming courses.'
     ],
-    dateRange: 'Jun 2025 - Present'
+    dateRange: 'Jun 2025 - Mar 2026'
   },
   {
     timelineType: 'research',
