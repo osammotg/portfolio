@@ -13,7 +13,7 @@ const Browse: React.FC = () => {
     {
       name: "academia",
       image: yellowImage,
-      backgroundGif: "https://tenor.com/view/shine-text-share-the-flip-side-sharetheflipsidegifs-stress-exams-gif-9543307" // Stress exams (Tenor)
+      backgroundGif: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdDExa2V0amxvZXU5aDh3ZzRyMHduem5wYmE3MXZrZGxjMDZob253cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cRMgB2wjHhVN2tDD2z/giphy.gif" // Stress exams (Giphy)
     },
     {
       name: "recruiter",
