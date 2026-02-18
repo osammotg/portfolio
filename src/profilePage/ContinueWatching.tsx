@@ -12,17 +12,17 @@ const continueWatchingConfig = {
   recruiter: [
     { title: "Recommendations", imgSrc: "https://picsum.photos/seed/recommendations/300/200", link: "/recommendations" },
     { title: "Projects", imgSrc: "https://picsum.photos/seed/projects/300/200", link: "/projects" },
-    { title: "Skills", imgSrc: "https://picsum.photos/seed/skills/300/200", link: "/skills" },
+    { title: "Publications", imgSrc: "https://picsum.photos/seed/publications/300/200", link: "/publications" },
+    { title: "Achievements", imgSrc: "https://picsum.photos/seed/achievements/300/200", link: "/achievements" },
     { title: "Music", imgSrc: "https://picsum.photos/seed/music/300/200", link: "/music" },
-    { title: "Reading", imgSrc: "https://picsum.photos/seed/books/300/200", link: "/reading" },
-    { title: "Work Permit", imgSrc: "https://picsum.photos/seed/workpermit/300/200", link: "/work-permit" }
+    { title: "Reading", imgSrc: "https://picsum.photos/seed/books/300/200", link: "/reading" }
   ],
   explorer: [
     { title: "Recommendations", imgSrc: "https://picsum.photos/seed/recommendations/300/200", link: "/recommendations" },
     { title: "Skills", imgSrc: "https://picsum.photos/seed/skills/300/200", link: "/skills" },
     { title: "Work Permit", imgSrc: "https://picsum.photos/seed/workpermit/300/200", link: "/work-permit" },
     { title: "Education", imgSrc: "https://picsum.photos/seed/education/300/200", link: "/education" },
-    { title: "Experience", imgSrc: "https://picsum.photos/seed/experience/300/200", link: "/experience" },
+    { title: "Research & Experience", imgSrc: "https://picsum.photos/seed/experience/300/200", link: "/experience" },
     { title: "Publications", imgSrc: "https://picsum.photos/seed/publications/300/200", link: "/publications" }
   ],
   academia: [

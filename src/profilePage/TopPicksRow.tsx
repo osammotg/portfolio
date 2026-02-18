@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TopPicksRow.css';
-import { FaBriefcase, FaCertificate, FaProjectDiagram, FaEnvelope, FaMusic, FaBook, FaGraduationCap, FaTrophy } from 'react-icons/fa';
+import { FaBriefcase, FaCertificate, FaProjectDiagram, FaEnvelope, FaMusic, FaBook, FaGraduationCap, FaTrophy, FaTools } from 'react-icons/fa';
 
 type ProfileType = 'recruiter' | 'explorer' | 'academia';
 
@@ -11,11 +11,11 @@ interface TopPicksRowProps {
 
 const topPicksConfig = {
   recruiter: [
+    { title: "Research & Experience", imgSrc: "https://picsum.photos/seed/experience/250/200", icon: <FaBriefcase />, route: "/experience" },
     { title: "Education", imgSrc: "https://picsum.photos/seed/education/250/200", icon: <FaGraduationCap />, route: "/education" },
-    { title: "Experience", imgSrc: "https://picsum.photos/seed/experience/250/200", icon: <FaBriefcase />, route: "/experience" },
-    { title: "Publications", imgSrc: "https://picsum.photos/seed/publications/250/200", icon: <FaBook />, route: "/publications" },
     { title: "Certifications", imgSrc: "https://picsum.photos/seed/certifications/250/200", icon: <FaCertificate />, route: "/certifications" },
-    { title: "Achievements", imgSrc: "https://picsum.photos/seed/achievements/250/200", icon: <FaTrophy />, route: "/achievements" },
+    { title: "Skills", imgSrc: "https://picsum.photos/seed/skills/250/200", icon: <FaTools />, route: "/skills" },
+    { title: "Work Permit", imgSrc: "https://picsum.photos/seed/workpermit/250/200", icon: <FaBriefcase />, route: "/work-permit" },
     { title: "Contact Me", imgSrc: "https://picsum.photos/seed/connect/250/200", icon: <FaEnvelope />, route: "/contact-me" }
   ],
   explorer: [
