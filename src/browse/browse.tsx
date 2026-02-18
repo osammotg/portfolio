@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import ProfileCard from '../components/ProfileCard';
 import blueImage from '../images/blue.png';
 import redImage from '../images/red.png';
+import yellowImage from '../images/yellow.png';
 import './browse.css';
 
 const Browse: React.FC = () => {
   const navigate = useNavigate();
 
   const profiles = [
+    {
+      name: "academia",
+      image: yellowImage,
+      backgroundGif: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTFscXQ2eHh6cWJ4NHFyM2ZqYjYxd21lZ3M2YTNwb2Qyd3g5aXdiNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oEduHbGIZHblgkx20/giphy.gif" // Floating library books
+    },
     {
       name: "recruiter",
       image: blueImage,

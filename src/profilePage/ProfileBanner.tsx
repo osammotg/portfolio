@@ -3,7 +3,7 @@ import './ProfileBanner.css';
 import PlayButton from '../components/PlayButton';
 import MoreInfoButton from '../components/MoreInfoButton';
 
-type ProfileType = 'recruiter' | 'explorer';
+type ProfileType = 'recruiter' | 'explorer' | 'academia';
 
 interface ProfileBannerProps {
   profile: ProfileType;
@@ -22,6 +22,12 @@ const fallbackContent: Record<
   explorer: {
     headline: 'Mahbod Tajdini - Data Science Student',
     summary: 'Analytical and research-focused Data Scientist with a strong background in Artificial Intelligence and ongoing Master’s studies in Data Science at Universität Zürich, with academic affiliation to ETH Zürich. I intend to pursue a PhD focusing on robot perception, computer vision, and machine learning, alongside data-driven approaches in bioinformatics.',
+    resumeUrl: '/Mahbod_Tajdini_CV.pdf',
+    linkedinUrl: 'https://www.linkedin.com/in/mahbodtajdini/'
+  },
+  academia: {
+    headline: 'Mahbod Tajdini - Academic Profile',
+    summary: 'Research-driven Data Scientist and MS student in Data Science at Universität Zürich (ETH Zürich academic affiliation). Focused on robot perception, computer vision, and machine learning, with an interest in bioinformatics and digital pathology. Actively pursuing PhD opportunities and collaborative academic research.',
     resumeUrl: '/Mahbod_Tajdini_CV.pdf',
     linkedinUrl: 'https://www.linkedin.com/in/mahbodtajdini/'
   }
