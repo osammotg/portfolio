@@ -53,7 +53,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
   {
     timelineType: 'work',
     name: 'Forward·Inc',
-    title: 'Student Consultant 🤵🏽‍♂️',
+    title: 'Student AI Consultant 🤵🏽‍♂️',
     link: 'https://www.newcomersforward.com/get-involved/',
     summaryPoints: [
       '📁 Providing research, analysis, and practical recommendations for a mission-driven organization. Review programs, analyze data, and support strategic planning efforts. Collaborate with team members to improve operations, strengthen services, and support organizational goals.'
