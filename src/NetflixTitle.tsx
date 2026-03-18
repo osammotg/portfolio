@@ -11,8 +11,15 @@ const NetflixTitle = () => {
   const handlePlaySound = () => {
     const audio = new Audio(netflixSound);
     audio.play().catch(error => console.error("Audio play error:", error));
-    setIsClicked(true); 
+    setIsClicked(true);
   };
+
+  useEffect(() => {
+    const autoPlayTimer = setTimeout(() => {
+      handlePlaySound();
+    }, 2000);
+    return () => clearTimeout(autoPlayTimer);
+  }, []);
 
   useEffect(() => {
     if (isClicked) {
