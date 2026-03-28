@@ -35,7 +35,7 @@ const publications: Publication[] = [
         <p><sup>*</sup>Equal contribution</p>
       </>
     ),
-    venue: 'International Conference on Software Engineering (ICSE) - SEET Track',
+    venue: 'International Conference on Software Engineering (ICSE)',
     year: '2026', 
     summary: 'To Appear',
   },

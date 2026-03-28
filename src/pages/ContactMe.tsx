@@ -13,7 +13,7 @@ const ContactMe: React.FC = () => {
     summary: 'Analytical and research-focused Data Scientist with a strong background in Artificial Intelligence and ongoing Master’s studies in Data Science at Universität Zürich, with academic affiliation to ETH Zürich.',
     companyUniversity: 'Universität Zürich | ETH Zürich',
     linkedinLink: 'https://www.linkedin.com/in/mahbodtajdini/',
-    email: 'mahbodtajdini@gmail.com',
+    email: 'mahbod@mahbodtajdini.com',
     phoneNumber: '+41 78 447 88 87'
   };
   const displayData = fallbackData;

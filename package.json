@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cp cv/Mahbod_Tajdini_CV.pdf build/Mahbod_Tajdini_CV.pdf",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
