@@ -4,7 +4,7 @@ import { FaBookOpen, FaExternalLinkAlt } from 'react-icons/fa';
 
 type Publication = {
   title: string;
-  authors: string;
+  authors: React.ReactNode;
   venue: string;
   year: string;
   summary: string;
@@ -21,7 +21,7 @@ I aspire to pursue doctoral research that allows me to contribute to these trans
 const publications: Publication[] = [
   {
     title: 'Capitalising on Football Data with Machine Learning: A Literature Review',
-    authors: 'Dionysios Kyriazopoulos, Mauricio Verano Merino, Mahbod Tajdini',
+    authors: 'Dionysios Kyriazopoulos, Mahbod Tajdini, Mauricio Verano Merino',
     venue: 'ACM Computing Surveys (ACM CSUR)',
     year: '2026',
     summary: 'Under Review',
@@ -29,7 +29,14 @@ const publications: Publication[] = [
   },
   {
     title: 'The Clash of Codes: From Peer-to-Peer Duplication to AI-Generation in Introductory Programming Assignments',
-    authors: 'Mahbod Tajdini, Jose Maria Zuarte Reis Claver, Mauricio Verano Merino',
+    authors: (
+      <>
+        Jose Maria Zuarte Reis Claver<sup>*</sup>,{" "}
+        Mahbod Tajdini<sup>*</sup>,{" "}
+        Mauricio Verano Merino
+        <p><sup>*</sup>Equal contribution</p>
+      </>
+    ),
     venue: 'International Conference on Software Engineering (ICSE) - SEET Track',
     year: '2026', 
     summary: 'To Appear',

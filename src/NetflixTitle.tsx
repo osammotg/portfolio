@@ -17,7 +17,7 @@ const NetflixTitle = () => {
   useEffect(() => {
     const autoPlayTimer = setTimeout(() => {
       handlePlaySound();
-    }, 1200);
+    }, 1000);
     return () => clearTimeout(autoPlayTimer);
   }, []);
 
