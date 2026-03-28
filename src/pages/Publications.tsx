@@ -9,7 +9,6 @@ type Publication = {
   year: string;
   summary: string;
   link?: string;
-  tags: string[];
 };
 
 const researchInterests = `
@@ -25,7 +24,6 @@ const publications: Publication[] = [
     venue: 'ACM Computing Surveys (ACM CSUR)',
     year: '2026',
     summary: 'Under Review',
-    tags: ['Machine Learning', 'Sports Analytics', 'Survey']
   },
   {
     title: 'The Clash of Codes: From Peer-to-Peer Duplication to AI-Generation in Introductory Programming Assignments',
@@ -40,7 +38,6 @@ const publications: Publication[] = [
     venue: 'International Conference on Software Engineering (ICSE) - SEET Track',
     year: '2026', 
     summary: 'To Appear',
-    tags: ['Software Engineering', 'Education', 'AI']
   },
   {
     title: 'Programming Lego MINDSTORMS Robots using NI LabVIEW®',
@@ -49,7 +46,6 @@ const publications: Publication[] = [
     year: '2022',
     summary: 'Open-access eBook',
     link: 'https://pnnayyeri.github.io/contents/labview_book_en.pdf',
-    tags: ['Robotics', 'Education', 'LabVIEW']
   }
 ];
 
@@ -88,11 +84,6 @@ const Publications: React.FC = () => {
                 <h2 className="publication-title">{publication.title}</h2>
                 <p className="publication-authors">{publication.authors}</p>
                 <p className="publication-summary">{publication.summary}</p>
-                <div className="publication-tags">
-                  {publication.tags.map((tag) => (
-                    <span key={tag} className="publication-tag">{tag}</span>
-                  ))}
-                </div>
                 {publication.link && (
                   <span className="publication-link">
                     View Publication <FaExternalLinkAlt />
