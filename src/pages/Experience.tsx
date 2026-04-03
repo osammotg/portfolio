@@ -21,7 +21,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
     title: 'Research Assistant 👨🏽‍🔬',
     link: 'https://usys.ethz.ch/',
     summaryPoints: [
-      '🧪 Supporting the development of WildInSync, an open platform for integrating ecological monitoring data to advance biodiversity research and conservation efforts.'
+      '🧪 Supporting the development of WildInSync, an initiative for global biodiversity monitoring that combines environmental DNA, remote sensing, and AI to generate standardized data for conservation research and decision-making.'
     ],
     dateRange: 'Mar 2026 - Present'
   },
