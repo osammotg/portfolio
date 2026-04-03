@@ -62,7 +62,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
     title: 'Hack4Good Organizing Staff 🖥️',
     link: 'https://www.analytics-club.org/hack4good',
     summaryPoints: [
-      'Supporting the operations of Hack4Good, an 8-week pro-bono program connecting ETH Zürich students with non-profit organizations to develop data-driven solutions for social causes.',
+      '🤝 Supporting the operations of Hack4Good, an 8-week pro-bono program connecting ETH Zürich students with non-profit organizations to develop data-driven solutions for social causes.',
       'Assisting in facilitating partnerships with non-profit organizations to source impactful, real-world data challenges.',
       'Providing direct guidance and resources to student teams throughout the project lifecycle.',
       'Executing logistics for workshops and events focused on data science skills and project management.',
