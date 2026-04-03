@@ -5,6 +5,26 @@ import { TimelineItem } from '../types';
 type DisplayTimelineItem = TimelineItem & { theme?: 'primary' };
 
 const experienceTimeline: DisplayTimelineItem[] = [
+    {
+    timelineType: 'research',
+    name: 'ETH Zürich - Computer Vision and Geometry Group (CVG)',
+    title: 'Graduate Student Researcher 👨🏽‍🔬',
+    link: 'https://cvg.ethz.ch/',
+    summaryPoints: [
+      '🧪 Working on state-of-the-art dynamic SLAM through the HERMES SLAM project, under the supervision of Dániel Béla Baráth at the Computer Vision and Geometry Group (CVG). The research focuses on integrating semantic scene graph representations into deep visual SLAM by extending DROID-SLAM in the Wild (DROID-W) with structured scene-level reasoning, aiming to improve reconstruction efficiency and robustness in unconstrained environments.'
+    ],
+    dateRange: 'Mar 2026 - Present'
+  },
+  {
+    timelineType: 'research',
+    name: 'ETH Zürich - Ecosystem and Landscape Evolution Group (ELE)',
+    title: 'Research Assistant 👨🏽‍🔬',
+    link: 'https://usys.ethz.ch/',
+    summaryPoints: [
+      '🧪 Supporting the development of WildInSync, an open platform for integrating ecological monitoring data to advance biodiversity research and conservation efforts.'
+    ],
+    dateRange: 'Mar 2026 - Present'
+  },
   {
     timelineType: 'research',
     name: 'EPFL - Signal Processing Laboratory (LTS4)',
@@ -28,7 +48,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
   // },
   {
     timelineType: 'teaching',
-    name: 'ETH Zürich D-USYS',
+    name: 'ETH Zürich - Ecosystem and Landscape Evolution Group (ELE)',
     title: 'Teaching Assistant 🧑🏽‍🏫',
     link: 'https://www.vvz.ethz.ch/Vorlesungsverzeichnis/lerneinheit.view?semkez=2026S&ansicht=ALLE&lerneinheitId=201478&lang=en',
     summaryPoints: [
