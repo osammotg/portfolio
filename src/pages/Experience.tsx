@@ -19,7 +19,7 @@ const experienceTimeline: DisplayTimelineItem[] = [
     timelineType: 'research',
     name: 'ETH Zürich - Ecosystem and Landscape Evolution Group (ELE)',
     title: 'Research Assistant 👨🏽‍🔬',
-    link: 'https://usys.ethz.ch/',
+    link: 'https://ele.ethz.ch/',
     summaryPoints: [
       '🧪 Supporting the development of WildInSync, an initiative for global biodiversity monitoring that combines environmental DNA, remote sensing, and AI to generate standardized data for conservation research and decision-making.'
     ],
