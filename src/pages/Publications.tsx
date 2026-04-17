@@ -35,9 +35,10 @@ const publications: Publication[] = [
         <p><sup>*</sup>Equal contribution</p>
       </>
     ),
-    venue: 'International Conference on Software Engineering (ICSE)',
-    year: '2026', 
-    summary: 'To Appear',
+    venue: 'International Conference on Software Engineering (ICSE) - SEET Track',
+    year: '2026',
+    summary: 'Published',
+    link: 'https://doi.org/10.1145/3786580.3786955',
   },
   {
     title: 'Programming Lego MINDSTORMS Robots using NI LabVIEW®',
