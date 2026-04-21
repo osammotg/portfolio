@@ -18,6 +18,16 @@ const achievements = [
     ]
   },
   {
+    heading: 'Hackathons',
+    items: [
+      {
+        text: "Achieved 3rd place at Datathon by Analytics Club at ETH, Switzerland's largest machine learning hackathon, attracting over 500 applicants from top universities across Switzerland, Germany, and Austria.",
+        date: 'Apr 2026',
+        logo: undefined
+      }
+    ]
+  },
+  {
     heading: 'University of Waterloo - CEMC (Canadian Computing Competition)',
     items: [
       {
