@@ -24,6 +24,11 @@ const achievements = [
         text: "Achieved 3rd place at Datathon by Analytics Club at ETH, Switzerland's largest machine learning hackathon, attracting over 500 applicants from top universities across Switzerland, Germany, and Austria.",
         date: 'Apr 2026',
         logo: undefined
+      },
+      {
+        text: 'Achieved 4th place at the Anthropic Hackathon organized by the Claude Builder Club of ETH Zürich.',
+        date: 'Mar 2026',
+        logo: undefined
       }
     ]
   },
