@@ -8,12 +8,12 @@ const experienceTimeline: DisplayTimelineItem[] = [
   {
     timelineType: 'work',
     name: 'ETH Robotics Club (ETHRC) - Aeronautics',
-    title: 'Robotic Perception Engineer 👀',
+    title: 'Perception Engineer 👀',
     link: 'https://www.ethrobotics.ch/',
     summaryPoints: [
       '🧪 Working with the Aeronautics team at ETHRC, where we use autonomous FPV racing drones to push the limits of high-speed aerial robotics. Contributing to the perception stack by developing real-time visual-inertial odometry (VIO), gate detection, state estimation, Kalman filtering, sensor fusion, and motion capture to support environment perception, localization, and autonomous navigation in dynamic environments.'
     ],
-    dateRange: 'Apr 2025 - Present'
+    dateRange: 'Apr 2026 - Present'
   },
     {
     timelineType: 'research',
