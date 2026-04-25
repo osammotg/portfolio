@@ -5,6 +5,16 @@ import { TimelineItem } from '../types';
 type DisplayTimelineItem = TimelineItem & { theme?: 'primary' };
 
 const experienceTimeline: DisplayTimelineItem[] = [
+  {
+    timelineType: 'work',
+    name: 'ETH Robotics Club (ETHRC) - Aeronautics',
+    title: 'Robotic Perception Engineer 👀',
+    link: 'https://www.ethrobotics.ch/',
+    summaryPoints: [
+      '🧪 Working with the Aeronautics team at ETHRC, where we use autonomous FPV racing drones to push the limits of high-speed aerial robotics. Contributing to the perception stack by developing real-time visual-inertial odometry (VIO), gate detection, state estimation, Kalman filtering, sensor fusion, and motion capture to support environment perception, localization, and autonomous navigation in dynamic environments.'
+    ],
+    dateRange: 'Apr 2025 - Present'
+  },
     {
     timelineType: 'research',
     name: 'ETH Zürich - Computer Vision and Geometry Group (CVG)',
@@ -36,16 +46,6 @@ const experienceTimeline: DisplayTimelineItem[] = [
     ],
     dateRange: 'Feb 2026 - Present'
   },
-  // {
-  //   timelineType: 'research',
-  //   name: 'MONKEE ETHZ x ETH Robotics Club (ETHRC)',
-  //   title: 'Robotic Perception Engineer 👀',
-  //   link: 'https://www.monkee.ethz.ch/',
-  //   summaryPoints: [
-  //     '🧪 Conducting research and applied development on perception and computer vision systems for Gibby, a tree-climbing research robot. The vision stack supports environment perception, branch and terrain understanding, localization, and autonomous navigation in complex, unstructured forest environments.'
-  //   ],
-  //   dateRange: 'Feb 2026 - Present'
-  // },
   {
     timelineType: 'teaching',
     name: 'ETH Zürich - Ecosystem and Landscape Evolution Group (ELE)',
