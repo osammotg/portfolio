@@ -1,0 +1,290 @@
+.phc-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55);
+  grid-column: 1 / -1;
+  --phc-accent: #e50914;
+}
+
+/* ── Hero ── */
+.phc-hero {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.phc-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.phc-slide--active {
+  opacity: 1;
+}
+
+.phc-video {
+  object-fit: cover;
+}
+
+/* Mute / unmute button — top-right corner */
+.phc-mute-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.45);
+  color: rgba(255,255,255,0.8);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.phc-mute-btn:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border-color: rgba(255,255,255,0.5);
+}
+
+.phc-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.55) 42%, rgba(10,10,10,0.12) 100%),
+    linear-gradient(to right, rgba(10,10,10,0.55) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ── Overlay content ── */
+.phc-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 26px 30px;
+  gap: 9px;
+}
+
+/* ── Badges ── */
+.phc-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.phc-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(var(--phc-accent-rgb, 229,9,20), 0.15);
+  color: var(--phc-accent);
+  border: 1px solid color-mix(in srgb, var(--phc-accent) 35%, transparent);
+}
+
+/* ── Title / subtitle ── */
+.phc-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+
+.phc-subtitle {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+.phc-desc {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 580px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+/* ── Stats ── */
+.phc-stats {
+  display: flex;
+  gap: 22px;
+}
+
+.phc-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.phc-stat-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--phc-accent);
+  line-height: 1;
+}
+
+.phc-stat-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Tech pills ── */
+.phc-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.phc-tech-pill {
+  font-size: 0.72rem;
+  padding: 2px 9px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ── Actions ── */
+.phc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  align-items: center;
+}
+
+.phc-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: rgba(255,255,255,0.09);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.16);
+  backdrop-filter: blur(6px);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.phc-link-btn:hover {
+  background: var(--phc-accent);
+  border-color: var(--phc-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+.phc-link-btn--primary {
+  background: var(--phc-accent);
+  border-color: var(--phc-accent);
+}
+
+.phc-link-btn--primary:hover {
+  filter: brightness(1.15);
+}
+
+.phc-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.55);
+  font-size: 0.8rem;
+  padding: 7px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.phc-expand-btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.5);
+}
+
+/* ── Slide dots ── */
+.phc-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.phc-dot {
+  width: 26px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.22);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s;
+}
+
+.phc-dot--active {
+  background: var(--phc-accent);
+}
+
+/* ── Story panel ── */
+.phc-story {
+  border-top: 1px solid #222;
+  padding: 26px 30px;
+  background: #141414;
+}
+
+.phc-story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 22px;
+}
+
+.phc-story-grid h4 {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--phc-accent);
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.phc-story-grid p {
+  font-size: 0.84rem;
+  color: #aaa;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.phc-story-grid p strong {
+  color: #ddd;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .phc-hero { height: 320px; }
+  .phc-overlay { padding: 18px 18px; gap: 7px; }
+  .phc-title { font-size: 1.4rem; }
+  .phc-desc { display: none; }
+}

@@ -16,12 +16,14 @@ import Reading from './pages/Reading';
 import Certifications from './pages/Certifications';
 import Achievements from './pages/Achievements';
 import Publications from './pages/Publications';
+import MeesPage from './research/mees/MeesPage';
 
 const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<NetflixTitle />} />
       <Route path="/browse" element={<Browse />} />
+      <Route path="/research/mees" element={<Layout><MeesPage /></Layout>} />
       <Route path="/profile/:profileName" element={<Layout><ProfilePage /></Layout>} />
       <Route path="/work-permit" element={<Layout><WorkPermit /></Layout>} />
       <Route path="/experience" element={<Layout><Experience /></Layout>} />

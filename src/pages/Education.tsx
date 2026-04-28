@@ -2,36 +2,43 @@ import React from 'react';
 import TimelinePage from '../components/TimelinePage';
 import { TimelineItem } from '../types';
 
+import ethzLogo from '../images/logos/ethz.png';
+import epflLogo from '../images/logos/epfl.png';
+
 const educationTimeline: TimelineItem[] = [
   {
     timelineType: 'education',
-    name: 'ETH Zürich and Universität Zürich (UZH)',
-    title: 'Master’s degree in Data Science 🎓',
+    name: 'ETH Zurich',
+    title: "Master's in Mechanical Engineering 🎓",
+    link: 'https://ethz.ch',
+    logo: ethzLogo,
     summaryPoints: [
-      '🎊 Currently pursuing a Master’s degree in Data Science at ETH Zürich and Universität Zürich (UZH), with an expected graduation date of August 2027.'
+      '🎊 Pursuing a Master\'s in Mechanical Engineering at ETH Zurich, focused on Robotics, Computer Vision, and Machine Learning (AI).',
+      '📐 Coursework in autonomous robotics, sequential convexification for autonomous systems, and deep learning-based image analysis.',
+      '🤖 Active in the ETH Robotics Club — Robot Learning Team: bimanual teleoperation, ACT policy learning, VLA models, Unitree G1 humanoid.',
     ],
-    dateRange: 'Sep 2025 - Present'
+    dateRange: '2024 - Present'
   },
   {
     timelineType: 'education',
-    name: 'Vrije Universiteit Amsterdam (VU Amsterdam)',
-    title: "Bachelor’s degree in Artificial Intelligence 🎓",
+    name: 'EPFL — École Polytechnique Fédérale de Lausanne',
+    title: 'Bachelor in Microengineering 🎓',
+    link: 'https://epfl.ch',
+    logo: epflLogo,
     summaryPoints: [
-      '🎊 Graduated cum laude with a GPA of 8.5/10 (=4.0 GPA).',
-      'Ranked Top 8% of the cohort.',
-      '📜 My Bachelor’s thesis, titled "Exploring Ball Recovery Times in Professional Football: Insights and Patterns", was completed under the supervision of Dr. Mauricio Verano Merino.'
+      '🎊 Graduated with a Bachelor in Microengineering from EPFL.',
+      '🛠️ Hands-on robotics and coding projects using Python and C++.',
     ],
-    dateRange: 'Sep 2022 - Jul 2025'
+    dateRange: '2020 - 2023'
   },
   {
     timelineType: 'education',
-    name: 'Tehran International School',
-    title: 'International Baccalaureate (IBDP) 🎓',
+    name: 'Saint-Petersburg State University',
+    title: 'Exchange Semester 🌍',
     summaryPoints: [
-      '🎊 Graduated with a total grade of 41/45.',
-      'Ranked Top 3% worldwide.'
+      '🌍 Self-organised exchange semester in Russia — achieved fluency in Russian during this period.',
     ],
-    dateRange: 'Sep 2020 - Jul 2022'
+    dateRange: 'Mar 2018 - Aug 2018'
   }
 ];
 

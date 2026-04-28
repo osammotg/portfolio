@@ -1,36 +1,28 @@
 import React from 'react';
 import './ContactMe.css';
-import profilePic from '../images/mahbod.jpg';
 import { FaEnvelope, FaPhoneAlt, FaCoffee, FaLinkedin } from 'react-icons/fa';
-import { ContactMe as IContactMe } from '../types';
 
 const ContactMe: React.FC = () => {
-
-  const fallbackData: IContactMe = {
-    profilePicture: { url: '' },
-    name: 'Mahbod Tajdini',
-    title: 'Data Science Student',
-    summary: 'Analytical and research-focused Data Scientist with a strong background in Artificial Intelligence and ongoing Master’s studies in Data Science at Universität Zürich, with academic affiliation to ETH Zürich.',
-    companyUniversity: 'Universität Zürich | ETH Zürich',
-    linkedinLink: 'https://www.linkedin.com/in/mahbodtajdini/',
-    email: 'mahbod@mahbodtajdini.com',
-    phoneNumber: '+41 78 447 88 87'
+  const data = {
+    name: 'Tommaso Gazzini',
+    title: 'Robotics Engineer & Entrepreneur',
+    summary: 'MSc Mechanical Engineering at ETH Zurich (focus: Robotics & AI). Co-founder of Striker. PX Engineer at Lovable. Swiss-Italian, 6 languages.',
+    companyUniversity: 'ETH Zurich | Lovable.dev',
+    linkedinLink: 'https://linkedin.com/in/tommaso-gazzini-2b5517253',
+    email: 'tom.gazzini@gmail.com',
+    phoneNumber: '+41 76 635 53 54'
   };
-  const displayData = fallbackData;
 
   return (
     <div className="contact-container">
       <div className="linkedin-badge-custom">
-        <img src={profilePic} alt={displayData.name} className="badge-avatar" />
         <div className="badge-content">
-          <h3 className="badge-name">{displayData.name}</h3>
-          <p className="badge-title">{displayData.title}</p>
-          <p className="badge-description">
-            {displayData.summary}
-          </p>
-          <p className="badge-company">{displayData.companyUniversity}</p>
+          <h3 className="badge-name">{data.name}</h3>
+          <p className="badge-title">{data.title}</p>
+          <p className="badge-description">{data.summary}</p>
+          <p className="badge-company">{data.companyUniversity}</p>
           <a
-            href={displayData.linkedinLink}
+            href={data.linkedinLink}
             target="_blank"
             rel="noopener noreferrer"
             className="badge-link"
@@ -45,14 +37,14 @@ const ContactMe: React.FC = () => {
       <div className="contact-details">
         <div className="contact-item">
           <FaEnvelope className="contact-icon" />
-          <a href={`mailto:${displayData.email}`} className="contact-link">
-            {displayData.email}
+          <a href={`mailto:${data.email}`} className="contact-link">
+            {data.email}
           </a>
         </div>
         <div className="contact-item">
           <FaPhoneAlt className="contact-icon" />
-          <a href={`tel:${displayData.phoneNumber}`} className="contact-link">
-            {displayData.phoneNumber}
+          <a href={`tel:${data.phoneNumber}`} className="contact-link">
+            {data.phoneNumber}
           </a>
         </div>
         <div className="contact-fun">

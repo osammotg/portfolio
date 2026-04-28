@@ -1,22 +1,22 @@
 import React from 'react';
 import './Skills.css';
-import { FaCode, FaDatabase, FaGlobe, FaLanguage, FaRobot } from 'react-icons/fa';
+import { FaCode, FaDatabase, FaGlobe, FaLanguage, FaRobot, FaServer } from 'react-icons/fa';
 import {
   SiCplusplus,
   SiDocker,
   SiGit,
   SiHuggingface,
-  SiJupyter,
   SiMysql,
-  SiNumpy,
-  SiOpencv,
-  SiPandas,
   SiPython,
   SiPytorch,
-  SiR,
-  SiScikitlearn,
-  SiScipy,
-  SiTensorflow
+  SiReact,
+  SiTypescript,
+  SiNextdotjs,
+  SiKubernetes,
+  SiFirebase,
+  SiWordpress,
+  SiPhp,
+  SiStripe,
 } from 'react-icons/si';
 
 type SkillItem = {
@@ -34,40 +34,55 @@ const categories: SkillCategory[] = [
   {
     title: 'Programming Languages',
     items: [
-      { name: 'Python', description: 'Programming Language', icon: <SiPython /> },
-      { name: 'R', description: 'Statistical Programming', icon: <SiR /> },
-      { name: 'Prolog', description: 'Logic Programming', icon: <FaCode /> },
-      { name: 'C++', description: 'Systems Programming', icon: <SiCplusplus /> },
-      { name: 'SQL', description: 'Query Language', icon: <FaDatabase /> }
+      { name: 'Python', description: 'Primary language — ML, robotics, data', icon: <SiPython /> },
+      { name: 'TypeScript', description: 'Frontend & backend', icon: <SiTypescript /> },
+      { name: 'PHP', description: 'WordPress / backend APIs', icon: <SiPhp /> },
+      { name: 'C / C++', description: 'Embedded systems, CAN bus, motor control', icon: <SiCplusplus /> },
+      { name: 'SQL', description: 'MySQL, relational databases', icon: <FaDatabase /> },
+      { name: 'MATLAB', description: 'Control systems, signal processing', icon: <FaCode /> },
     ]
   },
   {
-    title: 'Tools and Frameworks',
+    title: 'Web & Mobile',
     items: [
-      { name: 'PyTorch', description: 'Deep Learning', icon: <SiPytorch /> },
-      { name: 'TensorFlow', description: 'Deep Learning', icon: <SiTensorflow /> },
-      { name: 'Scikit-Learn', description: 'Machine Learning', icon: <SiScikitlearn /> },
-      { name: 'HuggingFace', description: 'NLP Tooling', icon: <SiHuggingface /> },
-      { name: 'Jupyter', description: 'Interactive Notebooks', icon: <SiJupyter /> },
-      { name: 'NumPy', description: 'Numerical Computing', icon: <SiNumpy /> },
-      { name: 'Pandas', description: 'Data Analysis', icon: <SiPandas /> },
-      { name: 'SciPy', description: 'Scientific Computing', icon: <SiScipy /> },
-      { name: 'Statsmodels', description: 'Statistical Modeling', icon: <FaDatabase /> },
-      { name: 'OpenCV', description: 'Computer Vision', icon: <SiOpencv /> },
-      { name: 'Roboflow', description: 'Computer Vision Platform', icon: <FaRobot /> },
-      { name: 'Git', description: 'Version Control', icon: <SiGit /> },
-      { name: 'Docker', description: 'Containerization', icon: <SiDocker /> },
-      { name: 'MySQL', description: 'Relational Database', icon: <SiMysql /> }
+      { name: 'React', description: 'Web & mobile UI', icon: <SiReact /> },
+      { name: 'Next.js', description: 'Full-stack web', icon: <SiNextdotjs /> },
+      { name: 'WordPress', description: 'CMS & REST API backend', icon: <SiWordpress /> },
+      { name: 'Stripe', description: 'Payments & escrow', icon: <SiStripe /> },
+      { name: 'Firebase', description: 'Push notifications, auth', icon: <SiFirebase /> },
+      { name: 'MySQL', description: 'Production database', icon: <SiMysql /> },
+    ]
+  },
+  {
+    title: 'AI & Robotics',
+    items: [
+      { name: 'PyTorch', description: 'Deep learning, imitation learning', icon: <SiPytorch /> },
+      { name: 'LeRobot', description: 'Robot learning framework', icon: <FaRobot /> },
+      { name: 'HuggingFace', description: 'Model hub, transformers', icon: <SiHuggingface /> },
+      { name: 'ROS / CAN Bus', description: 'Robot OS, motor control', icon: <FaRobot /> },
+      { name: 'MuJoCo', description: 'Physics simulation', icon: <FaCode /> },
+      { name: 'OpenCV', description: 'Computer vision', icon: <FaCode /> },
+    ]
+  },
+  {
+    title: 'Infrastructure & Tools',
+    items: [
+      { name: 'Kubernetes', description: 'Container orchestration (AWS EKS)', icon: <SiKubernetes /> },
+      { name: 'Docker', description: 'Containerisation', icon: <SiDocker /> },
+      { name: 'Git', description: 'Version control', icon: <SiGit /> },
+      { name: 'AWS', description: 'EKS, S3, Karpenter', icon: <FaServer /> },
+      { name: 'Vercel', description: 'Frontend deployment', icon: <FaCode /> },
     ]
   },
   {
     title: 'Languages',
     items: [
+      { name: 'Italian', description: 'Native', icon: <FaGlobe /> },
+      { name: 'French', description: 'Native', icon: <FaGlobe /> },
       { name: 'English', description: 'Fluent', icon: <FaGlobe /> },
-      { name: 'Persian', description: 'Fluent', icon: <FaLanguage /> },
-      { name: 'French', description: 'Conversational', icon: <FaLanguage /> },
-      { name: 'German', description: 'Basic', icon: <FaLanguage /> },
-      { name: 'Dutch', description: 'Basic', icon: <FaLanguage /> }
+      { name: 'German', description: 'Fluent (B2/C1)', icon: <FaLanguage /> },
+      { name: 'Spanish', description: 'Conversational', icon: <FaLanguage /> },
+      { name: 'Russian', description: 'Conversational', icon: <FaLanguage /> },
     ]
   }
 ];

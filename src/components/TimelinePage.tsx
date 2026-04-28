@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import {
@@ -7,10 +7,14 @@ import {
   FaGraduationCap as SchoolIcon,
   FaHandsHelping as VolunteerIcon,
   FaFlask as ResearchIcon,
-  FaChalkboardTeacher as TeachingIcon
+  FaChalkboardTeacher as TeachingIcon,
+  FaChevronDown,
+  FaChevronUp,
 } from 'react-icons/fa';
 import './TimelinePage.css';
 import { TimelineItem } from '../types';
+import ProjectHeroCard from './ProjectHeroCard';
+import { projectsData } from '../data/projects';
 
 type DisplayTimelineItem = TimelineItem & { theme?: 'primary' };
 
@@ -20,6 +24,11 @@ interface TimelinePageProps {
 }
 
 const TimelinePage: React.FC<TimelinePageProps> = ({ title, items }) => {
+  const [expandedProject, setExpandedProject] = useState<string | null>(null);
+
+  const toggleProject = (key: string) =>
+    setExpandedProject(prev => (prev === key ? null : key));
+
   return (
     <div className="timeline-page">
       <div className="timeline-container">
@@ -91,19 +100,45 @@ const TimelinePage: React.FC<TimelinePageProps> = ({ title, items }) => {
           const summaryPoints = Array.isArray(item.summaryPoints)
             ? item.summaryPoints
             : [item.summaryPoints];
+          const viewLabel = item.timelineType === 'education'
+            ? 'View Institution'
+            : item.timelineType === 'research' || item.timelineType === 'teaching'
+              ? 'View Organisation'
+              : 'View Company';
+
           const cardBody = (
             <div className="timeline-card">
-              {item.timelineType === 'work' || isVolunteer || isResearch || isTeaching ? (
-                <>
-                  <h3 className="vertical-timeline-element-title">{item.title}</h3>
-                  <h4 className="vertical-timeline-element-subtitle">{item.name}</h4>
-                </>
-              ) : (
-                <>
-                  <h3 className="vertical-timeline-element-title">{item.name}</h3>
-                  <h4 className="vertical-timeline-element-subtitle">{item.title}</h4>
-                </>
-              )}
+              <div className="timeline-card-header">
+                <div className="timeline-card-titles">
+                  {item.timelineType === 'work' || isVolunteer || isResearch || isTeaching ? (
+                    <>
+                      <h3 className="vertical-timeline-element-title">{item.title}</h3>
+                      <h4 className="vertical-timeline-element-subtitle">{item.name}</h4>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="vertical-timeline-element-title">{item.name}</h3>
+                      <h4 className="vertical-timeline-element-subtitle">{item.title}</h4>
+                    </>
+                  )}
+                </div>
+                {item.logo && (
+                  <div className="timeline-logo-wrapper">
+                    <img
+                      src={item.logo}
+                      alt={item.name}
+                      className="timeline-company-logo"
+                    />
+                    {item.badgeLogo && (
+                      <img
+                        src={item.badgeLogo}
+                        alt="badge"
+                        className="timeline-logo-badge"
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
               <ul className="timeline-points">
                 {summaryPoints.map((point, pointIndex) => (
                   <li key={pointIndex} className="timeline-point">
@@ -111,6 +146,34 @@ const TimelinePage: React.FC<TimelinePageProps> = ({ title, items }) => {
                   </li>
                 ))}
               </ul>
+              <div className="timeline-card-footer">
+                {item.link && (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="timeline-view-btn"
+                  >
+                    {viewLabel} ↗
+                  </a>
+                )}
+                {item.projectKey && projectsData[item.projectKey] && (
+                  <button
+                    className="timeline-project-btn"
+                    onClick={() => toggleProject(item.projectKey!)}
+                  >
+                    {expandedProject === item.projectKey
+                      ? <><FaChevronUp /> Hide project</>
+                      : <><FaChevronDown /> View project</>}
+                  </button>
+                )}
+              </div>
+
+              {item.projectKey && expandedProject === item.projectKey && projectsData[item.projectKey] && (
+                <div className="timeline-project-embed">
+                  <ProjectHeroCard {...projectsData[item.projectKey]} />
+                </div>
+              )}
             </div>
           );
 
@@ -140,19 +203,7 @@ const TimelinePage: React.FC<TimelinePageProps> = ({ title, items }) => {
                         : <SchoolIcon />
               }
             >
-              {item.link ? (
-                <a
-                  className="timeline-card-link"
-                  href={item.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${item.title} at ${item.name}`}
-                >
-                  {cardBody}
-                </a>
-              ) : (
-                cardBody
-              )}
+              {cardBody}
             </VerticalTimelineElement>
           );
         })}

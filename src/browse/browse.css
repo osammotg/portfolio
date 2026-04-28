@@ -1,28 +1,61 @@
 .browse-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   height: 100vh;
   background-color: #141414;
+  overflow: hidden;
+}
+
+/* Spline robot — full bleed background, cursor tracking active */
+.browse-spline-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+/* Cover the "Built with Spline" badge in bottom-right */
+.spline-watermark-cover {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 160px;
+  height: 44px;
+  background: #141414;
+  z-index: 2;
+}
+
+/* Content layer — pass-through for cursor, re-enable on interactive children */
+.browse-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 10vh;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .who-is-watching {
   color: #fff;
-    font-size: 3.5vw;
-    font-weight: unset;
-    width: 100%;
-    text-align: center;
+  font-size: 3.5vw;
+  font-weight: unset;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  margin-bottom: 2rem;
 }
 
 .profiles {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 10rem;
   justify-content: center;
+  pointer-events: auto;
 }
-
 
 @media (max-width: 768px) {
   .who-is-watching {

@@ -116,3 +116,99 @@
     transform: translateY(0);
   }
 }
+
+.timeline-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.timeline-card-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeline-logo-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+}
+
+.timeline-company-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  padding: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.timeline-logo-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #ff6600;
+  padding: 2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.timeline-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.timeline-view-btn {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  opacity: 0.6;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 3px 9px;
+  transition: opacity 0.15s;
+  color: inherit;
+}
+
+.timeline-view-btn:hover {
+  opacity: 1;
+}
+
+.timeline-project-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 3px 9px;
+  background: none;
+  color: inherit;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+
+.timeline-project-btn:hover {
+  opacity: 1;
+}
+
+.timeline-project-embed {
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  /* Break out of the timeline card's text color so phc styles apply cleanly */
+  color: initial;
+}

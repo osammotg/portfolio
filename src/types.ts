@@ -20,10 +20,12 @@ export interface TimelineItem {
   name: string;
   title: string;
   theme?: 'primary';
-  // techStack: string;
   summaryPoints: string[];
   dateRange: string;
   link?: string;
+  logo?: string;
+  badgeLogo?: string;
+  projectKey?: string;
 }
 
 export interface Project {

@@ -1,0 +1,88 @@
+.striker-map-wrapper {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0;
+  overflow: hidden;
+}
+
+.striker-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: #111;
+}
+
+.striker-map-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #e6e6e6;
+}
+
+.striker-map-count {
+  font-size: 0.78rem;
+  color: #888;
+}
+
+.striker-map {
+  width: 100%;
+  height: 280px;
+  background: #141414;
+}
+
+/* Remove default leaflet blue outline */
+.striker-map .leaflet-container {
+  background: #141414;
+  outline: none;
+}
+
+/* Football pin */
+.striker-map-pin {
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.striker-map-pin:hover {
+  transform: scale(1.3);
+}
+
+/* Popup */
+.striker-map-popup .leaflet-popup-content-wrapper {
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #f0f0f0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+.striker-map-popup .leaflet-popup-content {
+  margin: 10px 14px;
+  line-height: 1.5;
+}
+
+.striker-map-popup-inner strong {
+  color: #fff;
+  display: block;
+}
+
+.striker-map-popup-inner span {
+  color: #999;
+  font-size: 0.78rem;
+}
+
+.striker-map-popup .leaflet-popup-tip-container {
+  display: none;
+}
+
+.striker-map-popup .leaflet-popup-close-button {
+  color: #888 !important;
+  font-size: 16px;
+  top: 4px;
+  right: 6px;
+}

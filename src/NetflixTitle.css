@@ -1,38 +1,50 @@
 .netflix-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
   background-color: #141414;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .netflix-logo {
   width: 500px;
   height: auto;
-  opacity: 0;
-  transform: scale(0.8);
-  animation: fadeIn 0.5s forwards ease-in;
+}
+
+/* Waiting for click — fade in then gentle pulse */
+.netflix-logo.idle {
+  animation: fadeIn 0.6s forwards ease-in, pulse 2.4s 0.6s ease-in-out infinite;
 }
 
 @keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-.animate.netflix-logo {
+@keyframes pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.04); opacity: 0.85; }
+}
+
+/* After click — zoom out and fade */
+.netflix-logo.animate {
   animation: zoomOut 3s forwards ease-in-out;
 }
 
 @keyframes zoomOut {
-  0%, 80% {
-    transform: scale(0.8);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(3);
-    opacity: 0;
-  }
+  0%, 80% { transform: scale(0.8); opacity: 1; }
+  100%    { transform: scale(3);   opacity: 0; }
+}
+
+/* "tap to enter" hint */
+.tap-hint {
+  margin-top: 2rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  animation: fadeIn 1.2s forwards ease-in, pulse 2.4s 1.2s ease-in-out infinite;
 }

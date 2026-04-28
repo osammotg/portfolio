@@ -1,4 +1,7 @@
 {
+  "buildCommand": "CI= npm run build",
+  "outputDirectory": "build",
+  "framework": null,
   "headers": [
     {
       "source": "/(.*)",

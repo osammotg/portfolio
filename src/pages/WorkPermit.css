@@ -6,15 +6,17 @@
 }
 
 .work-permit-card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  padding: 25px 35px;
-  max-width: 500px;
+  background: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  padding: 36px 40px;
+  max-width: 560px;
+  width: 100%;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   animation: fadeInUp 0.5s ease-out;
-  color: #333;
+  color: #e6e6e6;
 }
 
 .work-permit-card:hover {
@@ -41,18 +43,57 @@
 }
 
 .work-permit-summary {
-  font-size: 1.1rem;
-  color: #555;
-  line-height: 1.6;
+  font-size: 1rem;
+  color: #c8c8c8;
+  line-height: 1.7;
 }
 
 .work-permit-summary strong {
   color: #e50914;
 }
 
-.additional-info {
-  font-size: 1rem;
-  color: #333;
+.work-permit-flags {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.flag-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.flag-emoji {
+  font-size: 2.2rem;
+}
+
+.work-permit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
   margin-top: 20px;
+}
+
+.work-permit-tag {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.82rem;
+  color: #d4d4d4;
+}
+
+.additional-info {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 22px;
   font-style: italic;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 16px;
 }

@@ -9,17 +9,11 @@ const NetflixTitle = () => {
   const navigate = useNavigate();
 
   const handlePlaySound = () => {
+    if (isClicked) return;
     const audio = new Audio(netflixSound);
     audio.play().catch(error => console.error("Audio play error:", error));
     setIsClicked(true);
   };
-
-  useEffect(() => {
-    const autoPlayTimer = setTimeout(() => {
-      handlePlaySound();
-    }, 1000);
-    return () => clearTimeout(autoPlayTimer);
-  }, []);
 
   useEffect(() => {
     if (isClicked) {
@@ -32,11 +26,14 @@ const NetflixTitle = () => {
 
   return (
     <div className="netflix-container" onClick={handlePlaySound}>
-      <img 
-        src={logoImage} 
-        alt="Custom Logo" 
-        className={`netflix-logo ${isClicked ? 'animate' : ''}`} 
+      <img
+        src={logoImage}
+        alt="Custom Logo"
+        className={`netflix-logo ${isClicked ? 'animate' : 'idle'}`}
       />
+      {!isClicked && (
+        <p className="tap-hint">tap to enter</p>
+      )}
     </div>
   );
 };

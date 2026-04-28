@@ -1,25 +1,49 @@
 import React from 'react';
 import './WorkPermit.css';
-import { WorkPermit as IWorkPermit } from '../types';
+
 const WorkPermit: React.FC = () => {
-
-  const fallbackData: IWorkPermit = {
-    visaStatus: 'Swiss Residence Permit (Type B)',
-    expiryDate: new Date('2027-08-31'),
-    summary: 'Open to roles in Switzerland while studying.',
-    additionalInfo: 'For any additional queries please reach me out on +41 78 447 88 87!'
-  };
-  const visaStatus = fallbackData.visaStatus;
-  const additionalInfo = fallbackData.additionalInfo;
-
   return (
     <div className="work-permit-container">
       <div className="work-permit-card">
-        <h2 className="work-permit-headline">🎓 Work Permit</h2>
+        <h2 className="work-permit-headline">Work Authorisation</h2>
+
+        <div className="work-permit-flags">
+          <div className="flag-item">
+            <span className="flag-emoji">🇨🇭</span>
+            <span>Swiss</span>
+          </div>
+          <div className="flag-item">
+            <span className="flag-emoji">🇮🇹</span>
+            <span>Italian</span>
+          </div>
+          <div className="flag-item">
+            <span className="flag-emoji">🇪🇺</span>
+            <span>EU / Schengen</span>
+          </div>
+        </div>
+
         <p className="work-permit-summary">
-          I'm currently on a <strong>{visaStatus}</strong> 🛂, which allows me to work in Switzerland🇨🇭 if my employer applys for a work permit!  My permit is valid until <strong> August 2027 (the end of my study period)</strong> 📅, giving me the opportunity to build valuable experience and grow my career here. 🌟
+          I hold <strong>Swiss and Italian dual citizenship</strong> and have completed my military
+          service with the Swiss Armed Forces (Special Forces Grenadier). I have the unrestricted
+          right to work in Switzerland, Italy, and across the entire EU / Schengen area —
+          no sponsorship, permit, or visa required.
         </p>
-        <p className="additional-info">{additionalInfo}</p>
+
+        <div className="work-permit-tags">
+          <span className="work-permit-tag">🇨🇭 Switzerland</span>
+          <span className="work-permit-tag">🇮🇹 Italy</span>
+          <span className="work-permit-tag">🇪🇺 European Union</span>
+          <span className="work-permit-tag">No sponsorship needed</span>
+          <span className="work-permit-tag">Military service ✓</span>
+        </div>
+
+        <p className="additional-info">
+          Questions? Reach out at{' '}
+          <a href="mailto:tom.gazzini@gmail.com" style={{ color: '#bbb' }}>
+            tom.gazzini@gmail.com
+          </a>{' '}
+          or <strong style={{ color: '#e6e6e6' }}>+41 76 635 53 54</strong>.
+        </p>
       </div>
     </div>
   );

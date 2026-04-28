@@ -1,0 +1,402 @@
+.striker-card {
+  background: #1a1a1a;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(229, 9, 20, 0.25);
+  transition: box-shadow 0.3s ease;
+  grid-column: 1 / -1;
+}
+
+.striker-card:hover {
+  box-shadow: 0 0 36px rgba(229, 9, 20, 0.35), 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Main layout ── */
+.striker-main {
+  display: flex;
+  gap: 0;
+  min-height: 500px;
+}
+
+/* ── Carousel ── */
+.striker-carousel {
+  flex: 0 0 300px;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px 20px;
+  gap: 14px;
+  position: relative;
+}
+
+/* ── iPhone mockup ── */
+.iphone-mockup {
+  position: relative;
+  width: 196px;
+  background: #111;
+  border-radius: 46px;
+  border: 1.5px solid #3a3a3a;
+  box-shadow:
+    inset 0 0 0 1px #555,
+    0 24px 60px rgba(0, 0, 0, 0.85),
+    0 0 0 0.5px #000;
+  padding: 14px 8px 12px;
+}
+
+/* Volume buttons — left side */
+.iphone-btn {
+  position: absolute;
+  background: #2e2e2e;
+  border-radius: 2px;
+}
+
+.iphone-btn--vol-up {
+  left: -3px;
+  top: 82px;
+  width: 3px;
+  height: 26px;
+}
+
+.iphone-btn--vol-down {
+  left: -3px;
+  top: 120px;
+  width: 3px;
+  height: 26px;
+}
+
+/* Power button — right side */
+.iphone-btn--power {
+  right: -3px;
+  top: 100px;
+  width: 3px;
+  height: 40px;
+}
+
+.iphone-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* Dynamic Island */
+.iphone-dynamic-island {
+  width: 80px;
+  height: 22px;
+  background: #000;
+  border-radius: 999px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+/* Screen — natural aspect ratio, no crop */
+.iphone-screen {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+  line-height: 0;
+}
+
+.iphone-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Home bar */
+.iphone-home-bar {
+  width: 56px;
+  height: 4px;
+  background: #555;
+  border-radius: 999px;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(229, 9, 20, 0.7);
+  border: none;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: background 0.2s;
+  z-index: 1;
+}
+
+.carousel-btn:hover { background: #e50914; }
+.carousel-btn--left  { left: 8px; }
+.carousel-btn--right { right: 8px; }
+
+.carousel-caption {
+  font-size: 0.72rem;
+  color: #888;
+  text-align: center;
+  margin: 0;
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #444;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
+}
+
+.carousel-dot--active { background: #e50914; }
+
+/* ── Content ── */
+.striker-content {
+  flex: 1;
+  padding: 32px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.striker-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.striker-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.striker-badge--red   { background: rgba(229, 9, 20, 0.15); color: #e50914; border: 1px solid rgba(229,9,20,0.3); }
+.striker-badge--dark  { background: #2a2a2a; color: #aaa; border: 1px solid #333; }
+.striker-badge--green { background: rgba(46, 180, 90, 0.15); color: #2eb45a; border: 1px solid rgba(46,180,90,0.3); }
+
+.striker-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1;
+}
+
+.striker-subtitle {
+  font-size: 0.82rem;
+  color: #666;
+  margin: 0;
+}
+
+.striker-desc {
+  font-size: 0.9rem;
+  color: #ccc;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 520px;
+}
+
+.striker-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.striker-tech-pill {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: #252525;
+  color: #bbb;
+  border: 1px solid #333;
+}
+
+.striker-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.striker-store-btn,
+.striker-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.striker-store-btn {
+  background: #e50914;
+  color: #fff;
+}
+
+.striker-store-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(229, 9, 20, 0.5);
+  background: #ff1a24;
+}
+
+.striker-link-btn {
+  background: #2b2b2b;
+  color: #ccc;
+  border: 1px solid #3a3a3a;
+}
+
+.striker-link-btn:hover {
+  background: #333;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.striker-map-inline {
+  margin-top: 16px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.striker-map-inline .striker-map-wrapper {
+  border-top: none;
+}
+
+.striker-map-inline .striker-map-header {
+  padding: 8px 14px;
+}
+
+.striker-map-inline .striker-map {
+  height: 160px;
+}
+
+.striker-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: 1px solid #333;
+  color: #888;
+  font-size: 0.82rem;
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.striker-expand-btn:hover {
+  color: #ccc;
+  border-color: #555;
+}
+
+/* ── Expanded story ── */
+.striker-story {
+  border-top: 1px solid #2a2a2a;
+  background: #161616;
+}
+
+/* Community banner */
+.striker-community-banner {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.striker-community-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+}
+
+.striker-community-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 24px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.03em;
+}
+
+.striker-story > .striker-story-grid {
+  padding: 28px 32px;
+}
+
+.striker-story-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.striker-story-grid h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #e50914;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.striker-story-grid p {
+  font-size: 0.85rem;
+  color: #aaa;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.striker-story-grid p strong {
+  color: #ddd;
+}
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+  .striker-main {
+    flex-direction: column;
+  }
+
+  .striker-carousel {
+    flex: none;
+    padding: 20px 16px;
+  }
+
+  .iphone-mockup {
+    width: 150px;
+  }
+
+  .striker-content {
+    padding: 20px 20px 24px;
+  }
+
+  .striker-title {
+    font-size: 1.5rem;
+  }
+}

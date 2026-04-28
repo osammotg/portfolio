@@ -3,17 +3,44 @@ import './Achievements.css';
 
 const achievements = [
   {
-    heading: 'Academic Distinctions',
+    heading: 'Academic & Research',
     items: [
       {
-        text: 'Earned a BSc in Artificial Intelligence from Vrije Universiteit Amsterdam, graduating cum laude and ranking within the top 8% of the cohort.',
-        date: 'Jul 2025',
-        logo: undefined
+        text: 'Admitted to MSc Mechanical Engineering at ETH Zurich (focus: Robotics & AI) — visited Prof. Roland Siegwart in person to pitch directly. One of the most competitive engineering master\'s programmes in Europe.',
+        date: 'Sep 2024',
       },
       {
-        text: 'Completed the International Baccalaureate Diploma Programme, achieving a ranking within the top 3% of students worldwide.',
-        date: 'May 2022',
-        logo: undefined
+        text: 'Graduated with a BSc in Microengineering from EPFL — École Polytechnique Fédérale de Lausanne.',
+        date: 'Jun 2024',
+      },
+      {
+        text: 'Achieved 87% success rate on SO-101 bimanual arm in MuJoCo using DAgger (iterative imitation learning), up from 73% with behavioural cloning baseline. Submitted to the goal-conditioned leaderboard.',
+        date: 'Dec 2025',
+      },
+      {
+        text: 'Achieved 90% success rate on transfer cube task and 50% on bimanual insertion using ACT (Action Chunking with Transformers) on real hardware at ETH Robotics Club.',
+        date: 'Mar 2026',
+      },
+      {
+        text: 'Optimised YAMS teleoperation system from ~30Hz to 120Hz (4x speedup) through cProfile-guided multithreading and critical bug fixes in the observation pipeline.',
+        date: 'Jan 2026',
+      }
+    ]
+  },
+  {
+    heading: 'Entrepreneurship',
+    items: [
+      {
+        text: 'Raised CHF 15,000 from football-industry angels for Striker — a football match organising app with 3,000+ registered players in Zurich.',
+        date: '2025',
+      },
+      {
+        text: 'Sold 60% stake in FuzeFoot (1,000+ members, 350+ games organised) for 5,000 EUR, retaining the Zurich user base and codebase to bootstrap Striker.',
+        date: 'Jun 2024',
+      },
+      {
+        text: 'Co-founded Elysium Sarl — a Geneva-based software factory that shipped apps for municipalities, medical companies, and local businesses. Clients include the Commune de Bardonnex (3-year contract) and Let\'sMed.',
+        date: '2021',
       }
     ]
   },
@@ -21,59 +48,29 @@ const achievements = [
     heading: 'Hackathons',
     items: [
       {
-        text: "Achieved 3rd place at Datathon by Analytics Club at ETH, Switzerland's largest machine learning hackathon, attracting over 500 applicants from top universities across Switzerland, Germany, and Austria.",
-        date: 'Apr 2026',
-        logo: undefined
+        text: 'Built CropSight at StartHack 2024 (EPFL, Lausanne) for the Syngenta Challenge — an AI-powered farming assistant with personalised biological product recommendations, farmer app with WhatsApp/SMS alerts, and a company analytics dashboard.',
+        date: 'Mar 2024',
       },
       {
-        text: 'Achieved 4th place at the Anthropic Hackathon organized by the Claude Builder Club of ETH Zürich.',
-        date: 'Mar 2026',
-        logo: undefined
+        text: 'Organised multiple hackathons in San Francisco as a consulting business, including events for Zeabur and Stack Auth (YC-backed).',
+        date: 'Sep 2024',
       }
     ]
   },
   {
-    heading: 'University of Waterloo - CEMC (Canadian Computing Competition)',
+    heading: 'Sports & Military',
     items: [
       {
-        text: 'Received a Certificate of Distinction from the University of Waterloo for placing within the top 25% of contestants worldwide in the Canadian Computing Competition.',
-        date: 'Dec 2020',
-        logo: undefined
+        text: 'Passed selection for the Swiss Special Forces Grenadiers (Isone) — one of the most demanding physical and psychological assessments in the Swiss Armed Forces.',
+        date: '2020',
       },
       {
-        text: 'Achieved first place nationally in Iran in the Canadian Computing Competition organized by the University of Waterloo.',
-        date: 'Dec 2020',
-        logo: undefined
-      }
-    ]
-  },
-  {
-    heading: 'World Robot Olympiad (WRO)',
-    items: [
-      {
-        text: 'Achieved first place in the Football Category at the Iran National Selection Competition of the World Robot Olympiad.',
-        date: 'Oct 2019',
-        logo: undefined
-      },
-      {
-        text: 'Achieved first place in the Football Category at the Iran National Selection Competition of the World Robot Olympiad for a second consecutive year.',
-        date: 'Oct 2018',
-        logo: undefined
-      },
-      {
-        text: 'Placed 16th in the Football Category at the World Robot Olympiad International Finals held in Costa Rica.',
-        date: 'Dec 2017',
-        logo: undefined
-      },
-      {
-        text: 'Achieved second place in the Football Category at the Iran National Selection Competition of the World Robot Olympiad.',
-        date: 'Oct 2017',
-        logo: undefined
+        text: '12 years of competitive water polo at national team level — developed elite teamwork, resilience, and discipline under pressure.',
+        date: '2010 - 2022',
       }
     ]
   }
 ];
-
 
 const Achievements: React.FC = () => {
   return (
