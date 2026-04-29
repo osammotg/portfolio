@@ -1,7 +1,7 @@
-import { motion, AnimatePresence, useScroll, useInView } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useInView, useTransform, type MotionValue } from "framer-motion";
 import { Mail, ChevronDown, ChevronUp, Play, ChevronRight } from "lucide-react";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import SplineViewer from "../../components/SplineViewer";
 import WaterPoloCard from "./WaterPoloCard";
 
@@ -131,7 +131,7 @@ function GlassCard({
   );
 }
 
-type AccentKey = "default" | "cyan" | "indigo" | "purple" | "fuchsia" | "amber";
+type AccentKey = "default" | "cyan" | "indigo" | "purple" | "fuchsia" | "amber" | "green";
 const accentMap: Record<AccentKey, string> = {
   default: "border-white/10 bg-white/5 text-muted",
   cyan: "border-accent-cyan/20 bg-accent-cyan/[0.08] text-accent-cyan",
@@ -139,6 +139,7 @@ const accentMap: Record<AccentKey, string> = {
   purple: "border-accent-purple/20 bg-accent-purple/[0.08] text-accent-purple",
   fuchsia: "border-accent-fuchsia/20 bg-accent-fuchsia/[0.08] text-accent-fuchsia",
   amber: "border-amber-400/20 bg-amber-400/[0.08] text-amber-400",
+  green: "border-[#22c55e]/30 bg-[#22c55e]/[0.10] text-[#4ade80]",
 };
 
 function Tag({
@@ -261,6 +262,12 @@ const TIMELINE_LOOP_X = 60;
 const TIMELINE_TRUNK_X = 24;
 // How far right of the lane the card sits — leaves room for the commit dot tick.
 const CARD_LANE_OFFSET = 32;
+// Era main content uses lg:pl-44 (11rem = 176px). Sub-cards must visually
+// nest under the era heading, so they're floored to land past the chapter
+// content. The horizontal tick stretches per-card to bridge lane → card.
+const ERA_CONTENT_LEFT_PX = 176;
+const SUBCARD_INDENT_PAST_ERA = 60;
+const MIN_SUBCARD_INDENT_PX = ERA_CONTENT_LEFT_PX + SUBCARD_INDENT_PAST_ERA;
 
 function useIsLg() {
   const [isLg, setIsLg] = useState<boolean>(() => {
@@ -290,10 +297,13 @@ const accentHex: Record<AccentKey, string> = {
   fuchsia: "#d946ef",
   default: "#a5adcb",
   amber:   "#fbbf24",
+  green:   "#22c55e",
 };
 
-type EraId = "ep01" | "ep02" | "ep04";
-type BranchAnchor = EraId | "above-ep01";
+type EraId = "ep01" | "sf" | "ep02" | "ep04";
+type BranchAnchor = EraId | "above-ep01" | "origin";
+
+type LogoSpec = { src: string; alt: string };
 
 interface BranchData {
   id: string;
@@ -302,25 +312,48 @@ interface BranchData {
   accent: AccentKey;
   description: string;
   items: string[];
+  /** 1-2 punch bullets shown above "Click to know more". Description + items
+      stay collapsed by default — gated behind expand. */
+  summary?: string[];
   bgImage?: string;
   stat?: string;
+  /** Drop image at /public${src}. Hidden silently if file is missing. */
+  logo?: LogoSpec;
+  /** Secondary badge (e.g., YC sticker on Stack Auth). */
+  badgeLogo?: LogoSpec;
   forkAt: BranchAnchor;
   mergeAt: EraId;
   lane: 1 | 2 | 3 | 4;
   loopHeight?: number;
+  /** Decimal year for fork point. Maps proportionally between forkAt era's
+      startYear and the next era's startYear. Defaults to era's startYear. */
+  forkYear?: number;
+  /** When forkAt === mergeAt and mergeYear is set, the branch runs as a real
+      fork→lane→merge in its lane (instead of the LOOP_X excursion). Used by
+      Lovable so its lane passes through the card stack. */
+  mergeYear?: number;
+  /** Label for the fork commit marker on the trunk. Shown next to a small dot. */
+  forkLabel?: string;
 }
 
 interface EraData {
   id: EraId;
   ep: string;
   year: string;
+  /** Decimal year for proportional fork mapping. Use 2024.0 for Jan, 2024.5 for July, etc. */
+  startYear: number;
   eyebrow: string;
   accent: AccentKey;
   title: string;
   description: string;
   items: string[];
+  /** 1-2 punch bullets shown above "Click to know more". Description + items
+      + stat stay collapsed by default — gated behind expand. */
+  summary?: string[];
   bgImage?: string;
   stat?: string;
+  /** Drop image at /public${src}. Hidden silently if file is missing. */
+  logo?: LogoSpec;
   branches?: BranchData[];
   isConvergence?: boolean;
 }
@@ -330,39 +363,55 @@ const GIT_ERAS: EraData[] = [
     id: "ep01",
     ep: "01",
     year: "2020 – 2023",
-    eyebrow: "EPFL · Lausanne",
+    startYear: 2020,
+    eyebrow: "EPFL · Lausanne · Lake Geneva campus",
     accent: "cyan",
     title: "BSc Microengineering",
     description: "Three years at EPFL building the engineering foundations. Robotics, electronics, autonomous systems, embedded programming.",
+    summary: ["Foundation: robotics, control theory, embedded systems"],
     items: [
       "Autonomous systems & control theory",
       "Embedded C + Python architectures",
       "Robotics, electronics, digital systems",
       "Self-organised exchange — Saint-Petersburg",
     ],
+    bgImage: "/epfl-campus.jpg",
+    logo: { src: "/logos/epfl.svg", alt: "EPFL" },
     branches: [
       {
         id: "waterpolo",
         title: "Water Polo — 12 Years Semi-Pro",
-        eyebrow: "National League · 3rd place 🥉",
+        eyebrow: "🇨🇭 Geneva 2011 → 2023 · 3rd place 🥉 · closes at SF",
         accent: "cyan",
-        description: "Competed semi-professionally through BSc and beyond. Won 3rd place in the Swiss National League.",
+        description: "Started in 2011 in Geneva. Twelve years competitive, ran through high school and BSc. Won 3rd place in the Swiss National League. Closes when Special Forces opens — the discipline thread continues, just no longer in a pool.",
+        summary: [
+          "12 years competitive · started 2011 in Geneva",
+          "🥉 3rd place — Swiss National League",
+        ],
         items: [
+          "🇨🇭 Started 2011 — in Geneva",
           "3rd place — Swiss National League",
           "Genève Natation · Carouge · Mira Costa",
-          "12 years competitive",
+          "12 years competitive · closes 2023",
         ],
         bgImage: "/waterpolo-bg.jpg",
-        forkAt: "above-ep01",
-        mergeAt: "ep04",
+        forkAt: "origin",
+        // Fork just past the Geneva arrival commit so the line clearly emerges
+        // after settling in, not stacked on the trunk dot itself.
+        forkYear: 2011.6,
+        mergeAt: "sf",
         lane: 1,
       },
       {
         id: "striker",
         title: "Striker — Co-Founder",
-        eyebrow: "Geneva · Zürich · Paris",
+        eyebrow: "2022 · Geneva · Zürich · Paris",
         accent: "purple",
-        description: "Co-founded Striker during BSc. Replaced WhatsApp groups for amateur football leagues.",
+        description: "Co-founded Striker in 2022 during BSc. Replaced WhatsApp groups for amateur football leagues. Still running through every chapter that follows.",
+        summary: [
+          "2.5k+ members · 500+ games organised",
+          "Replaced WhatsApp groups for amateur football",
+        ],
         items: [
           "2,500+ members · 500+ organised games",
           "React Native + PHP + Stripe",
@@ -370,20 +419,46 @@ const GIT_ERAS: EraData[] = [
         ],
         bgImage: "/striker-bg.png",
         stat: "2.5k+",
+        logo: { src: "/logos/striker.svg", alt: "Striker" },
         forkAt: "ep01",
+        forkYear: 2022,
+        forkLabel: "2022",
         mergeAt: "ep04",
         lane: 2,
       },
     ],
   },
   {
+    id: "sf",
+    ep: "1.5",
+    year: "2024 · Jan – Jul",
+    startYear: 2024,
+    eyebrow: "🇨🇭 Isone · Swiss Armed Forces · Grenadier corps",
+    accent: "green",
+    title: "Special Forces — Test the Limits",
+    description:
+      "Did my military duty between EPFL and ETH. Chose the hardest path in the Swiss army: Special Forces, Grenadier corps in Isone. The point was simple: grow, and find the real edge of my physical and mental limits. Honestly, it was a really nice experience. Came out with a different baseline for what 'hard' actually means and carried it into everything that came next.",
+    summary: ["Chose the hardest path on offer to find the real limits"],
+    items: [
+      "Swiss Special Forces · Grenadier corps · Isone, Ticino",
+      "Why: chose the hardest path on offer",
+      "Test the limits — physical and mental",
+      "Water polo (12 yrs) closes here · Striker keeps running",
+    ],
+    bgImage: "/military-bg.jpeg",
+  },
+  {
     id: "ep02",
     ep: "02",
-    year: "2024 – Present",
+    year: "2024 (Sep) – Present",
+    startYear: 2024.7,
     eyebrow: "ETH Zurich · M4 · Focus: Robotics & AI",
     accent: "amber",
     title: "MSc Mechanical Engineering",
     description: "After EPFL and building Striker, I made a decision: go deep. Become a really good robotics engineer. ETH Zurich was the only destination.",
+    summary: ["Decision: become a really good robotics engineer"],
+    bgImage: "/eth-campus.jpg",
+    logo: { src: "/logos/eth.svg", alt: "ETH Zurich" },
     items: [
       "Planning & Decision Making for Autonomous Robots — 6.0",
       "Image Analysis and Computer Vision — 5.0",
@@ -402,6 +477,10 @@ const GIT_ERAS: EraData[] = [
         eyebrow: "2024 – 2025 · Always building",
         accent: "indigo",
         description: "Following every model drop. Shipping tools. Staying hands-on with everything that comes out.",
+        summary: [
+          "Paperclip AI · OMI hardware · video pipelines",
+          "Always shipping — every model drop",
+        ],
         items: [
           "Paperclip AI — autonomous task runner",
           "Video & image generation pipelines",
@@ -409,24 +488,35 @@ const GIT_ERAS: EraData[] = [
           "Dozens of AI tools & experiments",
         ],
         forkAt: "ep02",
+        forkYear: 2024.8,
+        forkLabel: "Late 2024",
         mergeAt: "ep04",
         lane: 3,
       },
       {
         id: "lovable",
         title: "Lovable — PX Engineer (shipped & merged)",
-        eyebrow: "Stockholm · Aug 2025 · feature branch closed",
+        eyebrow: "Stockholm · Aug → Sep 2025 · feature branch closed",
         accent: "fuchsia",
-        description: "After a hackathon, messaged the founder directly. Thought it was a cool company. He said yes. Short, sharp, shipped — then back to the main thread.",
+        description: "Started my internship at Lovable in August 2025 — cold-messaged the founder after a hackathon, thought it was a cool company, he said yes. Shipped fast. Left in September to go to the U.S.",
+        summary: [
+          "Cold-messaged the founder · automated 120+ hrs",
+          "Stockholm · Aug → Sep 2025",
+        ],
         items: [
           "Cold-messaged the founder after the hackathon",
           "Goal Clarification Mode (GCM) design",
           "Automated 120+ hrs of support workflows",
         ],
+        logo: { src: "/logos/lovable.svg", alt: "Lovable" },
         forkAt: "ep02",
+        forkYear: 2025.35,
+        forkLabel: "Aug 2025",
+        // Self-merging branch with explicit mergeYear runs in its lane
+        // (fork → lane → merge-back) so the card stack visibly tethers to it.
         mergeAt: "ep02",
+        mergeYear: 2025.55,
         lane: 4,
-        loopHeight: 140,
       },
       {
         id: "stackauth",
@@ -434,6 +524,10 @@ const GIT_ERAS: EraData[] = [
         eyebrow: "San Francisco · YC S24 · Sep – Dec 2025",
         accent: "indigo",
         description: "Got passionate about entrepreneurship and went to SF. Worked inside the YC S24 ecosystem. Came back knowing exactly what to do next.",
+        summary: [
+          "Implemented MCP · 4 dev hackathons led",
+          "San Francisco · YC S24 detour",
+        ],
         items: [
           "Implemented Model Context Protocol (MCP)",
           "4 developer hackathons organised & led",
@@ -441,7 +535,11 @@ const GIT_ERAS: EraData[] = [
           "Returned: one mission — robotics",
         ],
         stat: "YC S24",
+        logo: { src: "/logos/stackauth.svg", alt: "Stack Auth" },
+        badgeLogo: { src: "/logos/yc.svg", alt: "Y Combinator S24" },
         forkAt: "ep02",
+        forkYear: 2025.55,
+        forkLabel: "Sep 2025",
         mergeAt: "ep04",
         lane: 4,
       },
@@ -451,11 +549,16 @@ const GIT_ERAS: EraData[] = [
     id: "ep04",
     ep: "04",
     year: "Sep 2025 – Present",
+    startYear: 2025.7,
     eyebrow: "ETH Robotics Club · Robot Learning · merge commit · all roads",
     accent: "fuchsia",
     title: "Robot Learning Team — 24/7, All In",
     description:
       "Every prior thread merges here. Bought a van and parked it at the lab. Sleep on-site, eat on-site, build on-site. Football, startups, side projects, San Francisco — all of it folded into one mission: become a really good robotics engineer. This is the only thing now.",
+    summary: [
+      "87% DAgger success on real bimanual hardware",
+      "All threads merge here — 24/7 on-site at the lab",
+    ],
     items: [
       "24/7 on-site at ETH Robotics Club — van as base camp",
       "YAMS: rebuilt control loop 30 → 120 Hz",
@@ -466,6 +569,7 @@ const GIT_ERAS: EraData[] = [
     ],
     stat: "87%",
     isConvergence: true,
+    logo: { src: "/logos/ethrc.svg", alt: "ETH Robotics Club" },
   },
 ];
 
@@ -556,6 +660,7 @@ const accentColors: Record<AccentKey, { border: string; bg: string; text: string
   fuchsia: { border: "border-accent-fuchsia/40", bg: "bg-accent-fuchsia/[0.12]", text: "text-accent-fuchsia", glow: "shadow-[0_0_20px_rgba(217,70,239,0.3)]" },
   default: { border: "border-white/10",          bg: "bg-white/[0.05]",          text: "text-muted",          glow: "" },
   amber:   { border: "border-amber-400/40",       bg: "bg-amber-400/[0.12]",      text: "text-amber-400",      glow: "" },
+  green:   { border: "border-[#22c55e]/45",       bg: "bg-[#22c55e]/[0.14]",      text: "text-[#4ade80]",      glow: "shadow-[0_0_24px_rgba(34,197,94,0.35)]" },
 };
 
 function RoboticsPipelineSection() {
@@ -694,11 +799,88 @@ function RoboticsPipelineSection() {
 
 // ─── Git Timeline components ──────────────────────────────────────────────────
 
+// Always-mounted summary bullets — sit above the "Click to know more" toggle.
+// Coral leading dots so they read as "the headline take", distinct from the
+// items list (which uses accent-colored dots and renders inside the expand).
+function PunchBullets({ bullets }: { bullets: string[] }) {
+  return (
+    <ul className="space-y-1 mb-3">
+      {bullets.map((b, i) => (
+        <li
+          key={i}
+          className="flex items-start gap-2 text-[13px] text-fg/85 leading-snug"
+        >
+          <span className="mt-[7px] h-1 w-1 rounded-full bg-[#ff7043] shrink-0" />
+          <span>{b}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// "Click to know more" toggle — quiet by default, coral on hover/active.
+function ExpandToggle({
+  expanded,
+  onClick,
+  className = "",
+}: {
+  expanded: boolean;
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-expanded={expanded}
+      className={`inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] font-mono transition-colors ${
+        expanded ? "text-[#ff7043]" : "text-fg/40 hover:text-[#ff7043]"
+      } ${className}`}
+    >
+      <span>{expanded ? "Click to collapse" : "Click to know more"}</span>
+      {expanded ? (
+        <ChevronUp className="h-3 w-3" />
+      ) : (
+        <ChevronDown className="h-3 w-3" />
+      )}
+    </button>
+  );
+}
+
+// Animated container that mounts/unmounts children with a height + opacity
+// transition. Cmd+F in collapsed cards won't find content (mount/unmount
+// tradeoff for clean animation) — the professor opens what interests him.
+function ExpandableSection({
+  expanded,
+  children,
+}: {
+  expanded: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <AnimatePresence initial={false}>
+      {expanded && (
+        <motion.div
+          key="expandable"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          style={{ overflow: "hidden" }}
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function BranchCard({ branch, delay = 0 }: { branch: BranchData; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-5% 0px" });
   const colors = accentColors[branch.accent];
   const hex = accentHex[branch.accent];
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <div ref={ref}>
@@ -716,24 +898,597 @@ function BranchCard({ branch, delay = 0 }: { branch: BranchData; delay?: number 
           </>
         )}
         <div className="relative p-4">
-          <div className="flex items-start justify-between mb-1.5">
+          <div className="flex items-start justify-between gap-2 mb-1.5">
             <span className={`text-[9px] uppercase tracking-[0.3em] ${colors.text}`}>{branch.eyebrow}</span>
-            {branch.stat && (
-              <span className={`font-playfair text-lg font-bold leading-none ${colors.text}`}>{branch.stat}</span>
-            )}
+            <div className="flex items-center gap-2 shrink-0">
+              <LogoImg spec={branch.badgeLogo} className="h-4 w-auto opacity-90" />
+              <LogoImg spec={branch.logo} className="h-5 w-auto opacity-95" />
+              {branch.stat && (
+                <span className={`font-playfair text-lg font-bold leading-none ${colors.text}`}>{branch.stat}</span>
+              )}
+            </div>
           </div>
-          <h4 className="font-playfair text-base font-bold text-white mb-1.5 leading-snug">{branch.title}</h4>
-          <p className="text-[11px] text-fg/60 leading-relaxed mb-2.5">{branch.description}</p>
-          <ul className="space-y-1">
-            {branch.items.map((item, i) => (
-              <li key={i} className="flex items-center gap-1.5 text-[11px] text-fg/55">
-                <span className="h-1 w-1 rounded-full shrink-0" style={{ background: hex }} />
-                {item}
-              </li>
-            ))}
-          </ul>
+          <h4 className="font-playfair text-base font-bold text-white mb-2 leading-snug">{branch.title}</h4>
+
+          {/* Punch bullets — always visible, the skim path */}
+          {branch.summary && branch.summary.length > 0 && (
+            <ul className="space-y-1 mb-2.5">
+              {branch.summary.map((s, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-1.5 text-[12px] text-fg/85 leading-snug"
+                >
+                  <span className="mt-[6px] h-1 w-1 rounded-full bg-[#ff7043] shrink-0" />
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Expand toggle — opens the full description + items */}
+          <ExpandToggle
+            expanded={expanded}
+            onClick={() => setExpanded((e) => !e)}
+          />
+
+          <ExpandableSection expanded={expanded}>
+            <div className="pt-3">
+              <p className="text-[11px] text-fg/60 leading-relaxed mb-2.5">{branch.description}</p>
+              <ul className="space-y-1">
+                {branch.items.map((item, i) => (
+                  <li key={i} className="flex items-center gap-1.5 text-[11px] text-fg/55">
+                    <span className="h-1 w-1 rounded-full shrink-0" style={{ background: hex }} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </ExpandableSection>
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+// ─── Origin story / git init intro ────────────────────────────────────────────
+
+type OriginLang = { lang: string; flag: string; level: string };
+
+type OriginStep = {
+  id: string;
+  cmd: string;
+  output: string[];
+  city: string;
+  country: string;
+  flag: string;
+  // Short narrative tag shown next to the trunk commit dot.
+  trunkLabel: string;
+  languages: OriginLang[];
+  // SVG map coordinates in a 320x180 viewBox — roughly Europe-shaped layout.
+  coords: { x: number; y: number };
+  // Path for the country shape on the map (same viewBox).
+  countryPath: string;
+  hashColor: string;
+  // Year used for branch fork mapping (origin anchor) and ordering.
+  year: number;
+};
+
+// Hand-drawn country outlines for the 320x180 map viewBox. Stylised silhouettes
+// — Italy as a leg/boot, Germany as an irregular hex, Switzerland as a tiny
+// kidney, Russia as a wide blob running off the right edge.
+const ITALY_PATH =
+  "M132 116 L146 112 L158 112 L166 116 L170 124 L172 134 L166 144 L168 152 L172 160 L178 168 L172 172 L162 168 L156 162 L156 170 L160 178 L152 180 L146 174 L142 166 L136 156 L130 144 L126 132 L128 122 Z";
+const GERMANY_PATH =
+  "M134 80 L142 72 L156 68 L170 68 L182 72 L188 80 L188 90 L186 100 L180 108 L172 114 L160 116 L152 112 L146 104 L140 96 L136 88 Z";
+const SWITZERLAND_PATH =
+  "M108 110 L118 106 L130 106 L140 110 L142 116 L138 122 L128 124 L116 122 L110 118 Z";
+const RUSSIA_PATH =
+  "M214 22 L240 16 L270 12 L320 10 L320 50 L320 80 L320 102 L308 106 L290 104 L272 100 L254 92 L238 82 L224 70 L218 56 L214 38 Z";
+
+// Faint context outlines — neighbours so the highlighted countries don't
+// float in empty space. Always visible at low opacity, no animation.
+// Origin span — used to year-position trunk dots and to map "origin" branch
+// fork years onto the same Y. INIT lives at year 2001; EPFL starts at 2020.
+const ORIGIN_YEAR_START = 2001;
+const ORIGIN_YEAR_END = 2020;
+// Pixel buffers carved out of the OriginIntro section before mapping years:
+// top buffer clears the INIT dot; bottom buffer leaves a visual gap before EP01.
+const ORIGIN_TOP_BUFFER = 60;
+const ORIGIN_BOTTOM_BUFFER = 40;
+
+const CONTEXT_PATHS = [
+  // France
+  "M70 96 L92 92 L108 96 L114 108 L114 122 L106 130 L92 134 L78 134 L66 124 L62 110 Z",
+  // Spain
+  "M28 138 L60 134 L82 138 L82 156 L74 168 L52 172 L30 168 L20 156 Z",
+  // UK
+  "M52 52 L70 46 L78 56 L76 70 L66 78 L54 76 L46 66 Z",
+  // Austria
+  "M150 110 L178 110 L188 116 L182 122 L162 122 L150 118 Z",
+  // Poland
+  "M188 76 L218 76 L222 92 L216 104 L194 104 L186 92 Z",
+  // Benelux blob
+  "M118 76 L134 74 L138 84 L134 92 L122 94 L116 86 Z",
+];
+
+const ORIGIN_STEPS: OriginStep[] = [
+  {
+    id: "init",
+    cmd: 'git init && git config user.name "Tommaso Gazzini"',
+    output: [
+      "→ born 1 Feb 2001 · Milan, Italy",
+    ],
+    city: "Milan",
+    country: "Italy",
+    flag: "🇮🇹",
+    trunkLabel: "2001 · Milan",
+    languages: [{ lang: "Italian", flag: "🇮🇹", level: "fluent" }],
+    coords: { x: 152, y: 130 },
+    countryPath: ITALY_PATH,
+    hashColor: "#06b6d4",
+    year: 2001,
+  },
+  {
+    id: "germany",
+    cmd: 'git commit -m "feat(life): relocated to Frankfurt, Germany"',
+    output: [],
+    city: "Frankfurt",
+    country: "Germany",
+    flag: "🇩🇪",
+    trunkLabel: "2003 · Frankfurt, Germany",
+    languages: [{ lang: "German", flag: "🇩🇪", level: "fluent" }],
+    coords: { x: 158, y: 88 },
+    countryPath: GERMANY_PATH,
+    hashColor: "#f59e0b",
+    year: 2003,
+  },
+  {
+    id: "geneva",
+    cmd: 'git commit -m "feat(life): moved to Geneva, Switzerland"',
+    output: [],
+    city: "Geneva",
+    country: "Switzerland",
+    flag: "🇨🇭",
+    trunkLabel: "2010 · Geneva",
+    languages: [
+      { lang: "French", flag: "🇫🇷", level: "fluent" },
+      { lang: "English", flag: "🇬🇧", level: "fluent" },
+    ],
+    coords: { x: 124, y: 114 },
+    countryPath: SWITZERLAND_PATH,
+    hashColor: "#e50914",
+    year: 2010,
+  },
+  {
+    id: "russia",
+    cmd: 'git commit -m "exchange: learn Russian in Saint Petersburg"',
+    output: [
+      "→ speak fluently",
+    ],
+    city: "Saint Petersburg",
+    country: "Russia",
+    flag: "🇷🇺",
+    trunkLabel: "2018 · Saint Petersburg",
+    languages: [
+      { lang: "Russian", flag: "🇷🇺", level: "fluent" },
+      { lang: "Spanish", flag: "🇪🇸", level: "fluent" },
+    ],
+    coords: { x: 258, y: 46 },
+    countryPath: RUSSIA_PATH,
+    hashColor: "#8b5cf6",
+    year: 2018,
+  },
+];
+
+// Renders a logo image, but silently hides if the file 404s. Lets us wire
+// logo paths now and have the user drop assets in /public/logos/ later
+// without ugly broken-image icons in the meantime.
+function LogoImg({
+  spec,
+  className,
+}: {
+  spec?: LogoSpec;
+  className?: string;
+}) {
+  const [errored, setErrored] = useState(false);
+  if (!spec || errored) return null;
+  return (
+    <img
+      src={spec.src}
+      alt={spec.alt}
+      className={className}
+      onError={() => setErrored(true)}
+      loading="lazy"
+    />
+  );
+}
+
+function PlaneSvg() {
+  // Small paper-plane mark, rotates with motion path.
+  return (
+    <g>
+      <path
+        d="M-7 -3 L8 0 L-7 3 L-3 0 Z"
+        fill="#fbbf24"
+        stroke="#f59e0b"
+        strokeWidth="0.8"
+        strokeLinejoin="round"
+      />
+    </g>
+  );
+}
+
+// Keywords in the terminal narrative that should pop. Each one is placed
+// in exactly one location (cmd OR output OR trunkLabel within a single scene)
+// so it never highlights twice in the same view.
+// Order matters for the regex — list longer phrases before single-word ones
+// so "Saint Petersburg" matches before "Russian" (which it doesn't contain,
+// but Italy/Germany pairs would otherwise be ambiguous).
+const ORIGIN_KEYWORDS = [
+  "Tommaso Gazzini",
+  "Saint Petersburg",
+  "Frankfurt",
+  "Milan",
+  "Germany",
+  "Geneva",
+  "Russian",
+];
+const ORIGIN_KEYWORD_PATTERN = new RegExp(`(${ORIGIN_KEYWORDS.join("|")})`, "g");
+
+function highlightKeywords(text: string): React.ReactNode[] {
+  const parts = text.split(ORIGIN_KEYWORD_PATTERN);
+  return parts.map((part, i) =>
+    ORIGIN_KEYWORDS.includes(part) ? (
+      // Coral / Netflix-warm — same #ff7043 used as the warm end of the trunk
+      // scroll gradient, so highlights feel native to the page palette.
+      <span key={i} className="text-[#ff7043] font-semibold">
+        {part}
+      </span>
+    ) : (
+      <React.Fragment key={i}>{part}</React.Fragment>
+    ),
+  );
+}
+
+function OriginIntro({ setEraRef }: { setEraRef?: (node: HTMLDivElement | null) => void }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(ref, { once: true, margin: "-15% 0px" });
+  const [step, setStep] = useState(-1);
+
+  const attachRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      ref.current = node;
+      setEraRef?.(node);
+    },
+    [setEraRef],
+  );
+
+  useEffect(() => {
+    if (!inView) return;
+    const timeouts: number[] = [];
+    // 600ms in: first commit. Each subsequent commit ~1.9s later.
+    ORIGIN_STEPS.forEach((_, i) => {
+      timeouts.push(window.setTimeout(() => setStep(i), 600 + i * 1900));
+    });
+    return () => timeouts.forEach((t) => window.clearTimeout(t));
+  }, [inView]);
+
+  const activeData = step >= 0 ? ORIGIN_STEPS[step] : null;
+  const typedCmd = useTypewriter(activeData?.cmd ?? "", 22, !!activeData);
+  const cmdComplete = !!activeData && typedCmd.length === activeData.cmd.length;
+
+  const allLangs = useMemo(() => {
+    const seen = new Set<string>();
+    const out: OriginLang[] = [];
+    for (let i = 0; i <= step && i < ORIGIN_STEPS.length; i++) {
+      for (const l of ORIGIN_STEPS[i].languages) {
+        if (!seen.has(l.lang)) {
+          out.push(l);
+          seen.add(l.lang);
+        }
+      }
+    }
+    return out;
+  }, [step]);
+
+  const litCount = Math.max(0, step + 1);
+  const litCities = ORIGIN_STEPS.slice(0, litCount);
+  const trailPath =
+    litCities.length > 1
+      ? "M " + litCities.map((c) => `${c.coords.x} ${c.coords.y}`).join(" L ")
+      : "";
+  const planePos = activeData?.coords ?? ORIGIN_STEPS[0].coords;
+
+  const allLangsDone = step >= ORIGIN_STEPS.length - 1 && cmdComplete;
+
+  // Year fraction within the OriginIntro span: 2001 (init) → 2020 (EPFL start).
+  // Used both here (CSS calc) and inside yAtYear("origin") so a fork at year Y
+  // lands exactly on the matching trunk dot.
+  const yearFraction = (yr: number) =>
+    Math.max(0, Math.min(1, (yr - ORIGIN_YEAR_START) / (ORIGIN_YEAR_END - ORIGIN_YEAR_START)));
+
+  return (
+    <div ref={attachRef} className="relative mb-20">
+      {/* INIT era dot — same geometry as other era dots */}
+      <motion.div
+        className="absolute left-0 top-0 w-12 h-12 flex items-center justify-center rounded-full bg-[#141414] border-2 z-10"
+        style={{ borderColor: "#06b6d4" }}
+        initial={{ scale: 0.2, opacity: 0 }}
+        animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.2, opacity: 0 }}
+        transition={{ duration: 0.45, ease }}
+      >
+        <span className="text-[9px] font-mono font-bold tracking-wider text-cyan-400">
+          INIT
+        </span>
+      </motion.div>
+
+      {/* Main-branch commit dots — small dots stacked on the trunk, one per
+          ORIGIN_STEP. Each appears as the corresponding terminal commit fires.
+          Hidden on mobile (no trunk visible). */}
+      <div className="hidden lg:block absolute inset-y-0 left-0 z-[8] pointer-events-none">
+        {ORIGIN_STEPS.map((s, i) => {
+          const f = yearFraction(s.year);
+          const lit = i <= step;
+          // Year-proportional position: 2001 sits just below INIT (top buffer),
+          // 2018 sits near the bottom (clear of EP01), with elapsed years between.
+          const top = `calc(${ORIGIN_TOP_BUFFER}px + ${f} * (100% - ${ORIGIN_TOP_BUFFER + ORIGIN_BOTTOM_BUFFER}px))`;
+          return (
+            <motion.div
+              key={`commit-${s.id}`}
+              className="absolute flex items-center gap-2"
+              style={{ top, left: 18 }}
+              initial={{ opacity: 0, scale: 0.3 }}
+              animate={lit ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.3 }}
+              transition={{ duration: 0.5, ease }}
+            >
+              <div
+                className="w-3 h-3 rounded-full border-2 bg-[#141414]"
+                style={{
+                  borderColor: "rgba(255,255,255,0.45)",
+                  boxShadow: "0 0 6px rgba(255,255,255,0.18)",
+                }}
+              />
+              <span className="text-[9px] font-mono font-medium whitespace-nowrap text-fg/70">
+                {s.flag} {highlightKeywords(s.trunkLabel)}
+              </span>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      <div className="pl-16 sm:pl-20 lg:pl-44">
+        <motion.div
+          {...fadeUp(0)}
+          className="flex flex-wrap items-center gap-3 mb-2"
+        >
+          <span className="text-[10px] font-mono text-muted/50">2001 – 2017</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-fg/45">
+            Origin · before EPFL
+          </span>
+        </motion.div>
+
+        <motion.h3
+          {...fadeUp(0.05)}
+          className="font-playfair text-2xl sm:text-3xl font-bold mb-3"
+        >
+          <span className="font-mono text-fg/30">~/tommaso $ </span>
+          <span className="text-[#ff7043]">git init</span>
+        </motion.h3>
+
+        {/* Composite panel: terminal foreground + map background. The map sits
+            as a faded backdrop so the country shapes light up *behind* the
+            commit messages — one calm canvas instead of two competing panels. */}
+        <motion.div
+          {...fadeUp(0.12)}
+          className="relative rounded-xl border border-white/10 bg-black/85 overflow-hidden shadow-2xl"
+        >
+          {/* Map background — desaturated, low opacity, no grid noise.
+              The country fills + plane animate on top of the dark base. */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: step >= 0 ? 0.32 : 0 }}
+            transition={{ duration: 1.0, ease }}
+          >
+            <svg
+              viewBox="0 0 320 180"
+              preserveAspectRatio="xMidYMid slice"
+              className="w-full h-full"
+              style={{ overflow: "visible" }}
+            >
+              {/* Faint context countries — always on, set the scene */}
+              {CONTEXT_PATHS.map((d, i) => (
+                <path
+                  key={`ctx-${i}`}
+                  d={d}
+                  fill="rgba(255,255,255,0.025)"
+                  stroke="rgba(255,255,255,0.10)"
+                  strokeWidth={0.8}
+                  strokeLinejoin="round"
+                />
+              ))}
+              {/* Lit countries — outline draws + fill fades in per commit */}
+              {ORIGIN_STEPS.map((s, i) => {
+                const isLit = i <= step;
+                return (
+                  <motion.path
+                    key={`country-${s.id}`}
+                    d={s.countryPath}
+                    fill="rgba(255,255,255,0.12)"
+                    stroke="rgba(255,255,255,0.65)"
+                    strokeWidth={1.3}
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={
+                      isLit
+                        ? { pathLength: 1, opacity: 1 }
+                        : { pathLength: 0, opacity: 0 }
+                    }
+                    transition={{ duration: 0.9, ease }}
+                  />
+                );
+              })}
+              {/* Trail (flight path) */}
+              {trailPath && (
+                <motion.path
+                  key={trailPath}
+                  d={trailPath}
+                  stroke="#ff7043"
+                  strokeWidth={1.4}
+                  strokeDasharray="3 4"
+                  fill="none"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 0.7 }}
+                  transition={{ duration: 1.0, ease }}
+                />
+              )}
+              {/* City dots */}
+              {ORIGIN_STEPS.map((s, i) => {
+                const isLit = i <= step;
+                return (
+                  <g key={s.id}>
+                    {isLit && (
+                      <motion.circle
+                        cx={s.coords.x}
+                        cy={s.coords.y}
+                        r={14}
+                        fill="rgba(255,112,67,0.30)"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: [0, 1.6, 1] }}
+                        transition={{ duration: 0.9, ease }}
+                      />
+                    )}
+                    <circle
+                      cx={s.coords.x}
+                      cy={s.coords.y}
+                      r={3.6}
+                      fill={isLit ? "#ff7043" : "rgba(255,255,255,0.18)"}
+                      stroke={isLit ? "#fff" : "transparent"}
+                      strokeWidth={1}
+                    />
+                  </g>
+                );
+              })}
+              {/* Plane */}
+              {step >= 0 && (
+                <motion.g
+                  animate={{ x: planePos.x, y: planePos.y }}
+                  transition={{ duration: 1.4, ease }}
+                  initial={{ x: ORIGIN_STEPS[0].coords.x, y: ORIGIN_STEPS[0].coords.y }}
+                >
+                  <PlaneSvg />
+                </motion.g>
+              )}
+            </svg>
+            {/* Vignette so terminal text stays legible across the whole panel */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/35" />
+          </motion.div>
+
+          {/* Terminal foreground */}
+          <div className="relative z-10 font-mono">
+            <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2 bg-white/[0.03]">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+              <span className="ml-3 text-[10px] text-muted/45 tracking-wide">
+                tommaso@origin: ~ — zsh
+              </span>
+              <span className="ml-auto text-[9px] uppercase tracking-[0.25em] text-fg/30">
+                {activeData ? `${activeData.flag} ${activeData.city}` : ""}
+              </span>
+            </div>
+            <div className="p-5 sm:p-6 min-h-[280px] text-[12.5px] leading-relaxed space-y-3">
+              {ORIGIN_STEPS.slice(0, step + 1).map((s, i) => {
+                const isCurrent = i === step;
+                const echoed = isCurrent ? typedCmd : s.cmd;
+                const showOutput = !isCurrent || cmdComplete;
+                return (
+                  <motion.div
+                    key={s.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="flex flex-wrap items-center">
+                      <span className="text-cyan-400/45">~/tommaso</span>
+                      <span className="text-fg/25">&nbsp;$&nbsp;</span>
+                      <span className="text-fg/55 break-all">{highlightKeywords(echoed)}</span>
+                      {isCurrent && !cmdComplete && (
+                        <span className="ml-0.5 inline-block w-2 h-3.5 bg-cyan-400/70 align-middle animate-blink" />
+                      )}
+                    </div>
+                    {showOutput && s.output.length > 0 && (
+                      <div className="mt-1.5 space-y-0.5 pl-1 text-fg/35">
+                        {s.output.map((line, li) => (
+                          <motion.div
+                            key={li}
+                            initial={{ opacity: 0, x: -4 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.25, delay: 0.06 * li }}
+                          >
+                            {highlightKeywords(line)}
+                          </motion.div>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+              {step < 0 && (
+                <div>
+                  <span className="text-cyan-400/45">~/tommaso</span>
+                  <span className="text-fg/25">&nbsp;$&nbsp;</span>
+                  <span className="ml-0.5 inline-block w-2 h-3.5 bg-cyan-400/70 align-middle animate-blink" />
+                </div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Compact languages chip row — fills as commits land */}
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          <AnimatePresence initial={false}>
+            {allLangs.map((l) => (
+              <motion.span
+                key={l.lang}
+                layout
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.025] px-2.5 py-1 text-[11px] text-fg/70"
+              >
+                <span className="text-sm leading-none">{l.flag}</span>
+                <span>{l.lang}</span>
+                <span className="text-[8.5px] font-mono uppercase tracking-wider text-fg/35">
+                  {l.level}
+                </span>
+              </motion.span>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Why microengineering? — slides in once the cinematic ends.
+            Bridges the origin story into the EPFL era below. */}
+        {allLangsDone && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3, ease }}
+            className="mt-4 rounded-xl border border-white/10 bg-white/[0.025] p-4 max-w-2xl"
+          >
+            <div className="text-[9px] uppercase tracking-[0.25em] text-fg/45 mb-2">
+              why microengineering?
+            </div>
+            <p className="text-[12.5px] text-fg/80 leading-relaxed">
+              Big technology. Passionate entrepreneur. Everything combines into{" "}
+              <span className="text-[#ff7043] font-semibold">robotics</span>.
+              That&rsquo;s why I chose{" "}
+              <span className="text-[#ff7043] font-semibold">microengineering at EPFL</span>.
+            </p>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
@@ -742,10 +1497,12 @@ function EraNode({
   era,
   isLast = false,
   setEraRef,
+  getBranchCardRef,
 }: {
   era: EraData;
   isLast?: boolean;
   setEraRef?: (node: HTMLDivElement | null) => void;
+  getBranchCardRef?: (id: string) => (node: HTMLDivElement | null) => void;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
@@ -753,6 +1510,7 @@ function EraNode({
   const hex = accentHex[era.accent];
   const hasBranches = (era.branches?.length ?? 0) > 0;
   const isLg = useIsLg();
+  const [expanded, setExpanded] = useState(false);
 
   const attachRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -805,19 +1563,19 @@ function EraNode({
                 filter: "blur(0.5px)",
               }}
             />
-            {/* Inner dark disc with the merge glyph */}
+            {/* Inner dark disc — year + MERGE label */}
             <div className="absolute inset-[3px] rounded-full bg-[#141414] flex flex-col items-center justify-center">
               <span
-                className="text-2xl font-bold text-transparent bg-clip-text leading-none"
+                className="text-base font-mono font-bold text-transparent bg-clip-text leading-none"
                 style={{
                   backgroundImage:
                     "linear-gradient(135deg, #e50914, #d946ef, #ff7043)",
                 }}
               >
-                ◉
+                {Math.floor(era.startYear)}
               </span>
-              <span className="text-[7px] font-mono font-bold tracking-[0.2em] text-fg/70 mt-0.5">
-                HEAD
+              <span className="text-[7px] font-mono font-bold tracking-[0.2em] text-fg/70 mt-1">
+                MERGE
               </span>
             </div>
           </motion.div>
@@ -843,8 +1601,8 @@ function EraNode({
           animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0.2, opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="text-[9px] font-mono font-bold" style={{ color: hex }}>
-            EP{era.ep}
+          <span className="text-[11px] font-mono font-bold tabular-nums" style={{ color: hex }}>
+            {Math.floor(era.startYear)}
           </span>
         </motion.div>
       )}
@@ -861,53 +1619,109 @@ function EraNode({
           <span className={`text-[10px] uppercase tracking-[0.3em] ${colors.text}`}>{era.eyebrow}</span>
         </motion.div>
 
-        <motion.h3
-          className="font-playfair text-2xl sm:text-3xl font-bold mb-3"
+        {/* Era hero image — banner above the title (e.g., Special Forces) */}
+        {era.bgImage && (
+          <motion.div
+            className={`relative w-full max-w-md aspect-[16/9] rounded-2xl overflow-hidden mb-4 border ${colors.border}`}
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+            transition={{ duration: 0.55, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url('${era.bgImage}')` }}
+            />
+            {/* Flat darken — keeps daylight photos legible without overpowering the page */}
+            <div className="absolute inset-0 bg-[#141414]/55" />
+            {/* Gradient — extra weight at the bottom edge for any overlay text */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#141414]/90 via-[#141414]/30 to-transparent" />
+            {era.id === "sf" && (
+              <>
+                <div className="absolute top-3 right-3 flex items-center gap-2 rounded-full bg-black/70 backdrop-blur-sm border border-white/15 px-3 py-1.5">
+                  <span className="text-base leading-none">🇨🇭</span>
+                  <span className="text-[9px] font-mono font-bold tracking-[0.2em] text-white/85">
+                    GRENADIER · ISONE
+                  </span>
+                </div>
+                <div className="absolute bottom-3 left-3 font-mono text-[10px] text-white/70">
+                  <span className="text-[#4ade80]">commit</span> waterpolo →{" "}
+                  <span className="text-white/90">main</span>
+                </div>
+              </>
+            )}
+          </motion.div>
+        )}
+
+        <motion.div
+          className="flex items-center gap-3 sm:gap-4 mb-3 flex-wrap"
           initial={{ opacity: 0, x: -16 }}
           animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
           transition={{ duration: 0.45, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
         >
-          {era.isConvergence ? (
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] via-[#d946ef] to-[#ff7043]">
-              {era.title}
-            </span>
-          ) : era.title}
-        </motion.h3>
+          <h3 className="font-playfair text-2xl sm:text-3xl font-bold">
+            {era.isConvergence ? (
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] via-[#d946ef] to-[#ff7043]">
+                {era.title}
+              </span>
+            ) : era.title}
+          </h3>
+          <LogoImg spec={era.logo} className="h-7 sm:h-8 w-auto opacity-90" />
+        </motion.div>
 
-        <motion.p
-          className="text-sm text-muted leading-relaxed mb-5 max-w-2xl"
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {era.description}
-        </motion.p>
-
-        <div className="space-y-2 mb-5">
-          {era.items.map((item, j) => (
-            <motion.div
-              key={j}
-              className="flex items-center gap-2.5 text-sm text-fg/80"
-              initial={{ opacity: 0, x: -10 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-              transition={{ duration: 0.35, delay: 0.25 + j * 0.06, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: hex }} />
-              {item}
-            </motion.div>
-          ))}
-        </div>
-
-        {era.stat && (
-          <motion.div
-            className={`inline-flex items-center rounded-2xl border ${colors.border} ${colors.bg} px-5 py-3`}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }}
-            transition={{ duration: 0.4, delay: 0.3 + era.items.length * 0.06, ease: [0.16, 1, 0.3, 1] }}
+        {/* Punch bullets — always visible, the skim path */}
+        {era.summary && era.summary.length > 0 && (
+          <motion.ul
+            className="space-y-1.5 mb-4 max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className={`font-playfair text-3xl font-bold ${colors.text}`}>{era.stat}</span>
-          </motion.div>
+            {era.summary.map((s, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-2.5 text-[15px] text-fg/85 leading-snug"
+              >
+                <span className="mt-[8px] h-1.5 w-1.5 rounded-full bg-[#ff7043] shrink-0" />
+                <span>{s}</span>
+              </li>
+            ))}
+          </motion.ul>
         )}
+
+        {/* Expand toggle — opens the full description + items + stat */}
+        <ExpandToggle
+          expanded={expanded}
+          onClick={() => setExpanded((e) => !e)}
+          className="mb-2"
+        />
+
+        <ExpandableSection expanded={expanded}>
+          <div className="pt-3 max-w-2xl">
+            <p className="text-sm text-muted leading-relaxed mb-5">
+              {era.description}
+            </p>
+
+            <div className="space-y-2 mb-5">
+              {era.items.map((item, j) => (
+                <div
+                  key={j}
+                  className="flex items-center gap-2.5 text-sm text-fg/80"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: hex }} />
+                  {item}
+                </div>
+              ))}
+            </div>
+
+            {era.stat && (
+              <div
+                className={`inline-flex items-center rounded-2xl border ${colors.border} ${colors.bg} px-5 py-3`}
+              >
+                <span className={`font-playfair text-3xl font-bold ${colors.text}`}>{era.stat}</span>
+              </div>
+            )}
+          </div>
+        </ExpandableSection>
       </div>
 
       {/* Branch cards — indented to their lane on lg+, stacked vertically.
@@ -916,11 +1730,18 @@ function EraNode({
         <div className="pl-16 sm:pl-20 lg:pl-0 mt-8 flex flex-col gap-5">
           {era.branches!.map((branch, bi) => {
             const laneX = laneOf(branch);
-            const indent = isLg ? laneX + CARD_LANE_OFFSET : 0;
+            const indent = isLg
+              ? Math.max(laneX + CARD_LANE_OFFSET, MIN_SUBCARD_INDENT_PX)
+              : 0;
+            // Distance from the card's left edge back to its lane line — the
+            // dot sits on the lane, the tick spans the gap. Varies per branch
+            // since cards are floored to a shared indent column.
+            const tickReach = isLg ? indent - laneX : 0;
             const branchHex = accentHex[branch.accent];
             return (
               <div
                 key={bi}
+                ref={getBranchCardRef?.(branch.id)}
                 className="relative max-w-[520px]"
                 style={{ marginLeft: indent }}
               >
@@ -929,8 +1750,8 @@ function EraNode({
                   <span
                     className="absolute top-[22px] h-px pointer-events-none"
                     style={{
-                      left: -CARD_LANE_OFFSET + 6,
-                      width: CARD_LANE_OFFSET - 12,
+                      left: -tickReach + 6,
+                      width: tickReach - 12,
                       background: branchHex,
                       opacity: 0.5,
                     }}
@@ -941,7 +1762,7 @@ function EraNode({
                   <span
                     className="absolute top-[18px] w-2.5 h-2.5 rounded-full border-2 bg-[#141414] z-20"
                     style={{
-                      left: -CARD_LANE_OFFSET - 5,
+                      left: -tickReach - 5,
                       borderColor: branchHex,
                       boxShadow: `0 0 10px ${branchHex}88`,
                     }}
@@ -957,14 +1778,99 @@ function EraNode({
   );
 }
 
-type ComputedPath = { id: string; d: string; color: string };
+type ComputedPath = {
+  id: string;
+  d: string;
+  color: string;
+  // Per-path scroll progress range (in 0..1 of section's scrollYProgress)
+  // so each branch finishes drawing as its merge-point area approaches viewport center.
+  fadeStart: number;
+  fadeEnd: number;
+};
+
+type ForkMarker = {
+  id: string;
+  y: number;
+  color: string;
+  label: string;
+  fadeStart: number;
+};
+
+// Small "commit on the trunk" indicator at fork points — shows the year/month
+// when a branch was created. Fades in synced with the path's draw animation.
+function ForkMarkerView({
+  marker,
+  scrollYProgress,
+}: {
+  marker: ForkMarker;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const opacity = useTransform(
+    scrollYProgress,
+    [Math.max(0, marker.fadeStart - 0.04), marker.fadeStart + 0.02, 1],
+    [0, 1, 1],
+    { clamp: true },
+  );
+  return (
+    <motion.div
+      className="hidden lg:flex absolute z-[8] items-center gap-2 pointer-events-none"
+      style={{ left: 18, top: marker.y - 6, opacity }}
+    >
+      <div
+        className="w-3 h-3 rounded-full border-2 bg-[#141414]"
+        style={{
+          borderColor: marker.color,
+          boxShadow: `0 0 8px ${marker.color}88`,
+        }}
+      />
+      <span
+        className="text-[9px] font-mono font-bold tracking-wider whitespace-nowrap"
+        style={{ color: marker.color }}
+      >
+        {marker.label}
+      </span>
+    </motion.div>
+  );
+}
+
+// One <path> per branch. Each path has its own scroll-progress range so
+// short branches (Lovable loop) and long branches (Water Polo) feel paced
+// to where the user is currently scrolled.
+function BranchPath({
+  data,
+  scrollYProgress,
+}: {
+  data: ComputedPath;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const pathLength = useTransform(
+    scrollYProgress,
+    [data.fadeStart, data.fadeEnd],
+    [0, 1],
+    { clamp: true },
+  );
+  return (
+    <motion.path
+      d={data.d}
+      stroke={data.color}
+      strokeWidth={2.5}
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ pathLength, opacity: 0.92 }}
+    />
+  );
+}
 
 function GitTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
   const tracksRef = useRef<HTMLDivElement>(null);
   const eraNodes = useRef<Record<string, HTMLDivElement | null>>({});
   const refSetters = useRef<Record<string, (node: HTMLDivElement | null) => void>>({});
+  const branchCardNodes = useRef<Record<string, HTMLDivElement | null>>({});
+  const branchCardSetters = useRef<Record<string, (node: HTMLDivElement | null) => void>>({});
   const [paths, setPaths] = useState<ComputedPath[]>([]);
+  const [forkMarkers, setForkMarkers] = useState<ForkMarker[]>([]);
   const [tracksHeight, setTracksHeight] = useState(0);
 
   const { scrollYProgress } = useScroll({
@@ -979,6 +1885,15 @@ function GitTimeline() {
       };
     }
     return refSetters.current[id];
+  }, []);
+
+  const getBranchCardRef = useCallback((id: string) => {
+    if (!branchCardSetters.current[id]) {
+      branchCardSetters.current[id] = (node: HTMLDivElement | null) => {
+        branchCardNodes.current[id] = node;
+      };
+    }
+    return branchCardSetters.current[id];
   }, []);
 
   const recompute = useCallback(() => {
@@ -1004,20 +1919,118 @@ function GitTimeline() {
       // standard node is 48px at top:0 → center y = top + 24. Same in both.
       eraY[era.id] = r.top - cRect.top + 24;
     }
+    // Origin section's top in tracksRef coords — used by the "origin" anchor
+    // to map ORIGIN_STEPS years to the same trunk dot positions rendered in OriginIntro.
+    const originNode = eraNodes.current["origin"];
+    const originTop = originNode
+      ? originNode.getBoundingClientRect().top - cRect.top
+      : 0;
+
+    // Map a (forkAt era, year) tuple to a Y position. Year is mapped
+    // proportionally between the era's startYear and the next era's startYear.
+    // Falls back to the era's dot Y if year is undefined or out of range.
+    const yAtYear = (anchor: BranchAnchor, year: number | undefined): number => {
+      if (anchor === "above-ep01") return 0;
+      if (anchor === "origin") {
+        // Mirror the year-fraction CSS calc used by the trunk dots in
+        // OriginIntro: a fork at year Y lands at the same Y as the matching
+        // commit dot, regardless of how the section's actual height resolves.
+        if (!originNode) return originTop + ORIGIN_TOP_BUFFER;
+        const sectionH = originNode.getBoundingClientRect().height;
+        const usable = Math.max(0, sectionH - ORIGIN_TOP_BUFFER - ORIGIN_BOTTOM_BUFFER);
+        const fraction = year === undefined
+          ? 0
+          : Math.max(0, Math.min(1, (year - ORIGIN_YEAR_START) / (ORIGIN_YEAR_END - ORIGIN_YEAR_START)));
+        return originTop + ORIGIN_TOP_BUFFER + fraction * usable;
+      }
+      const eraIdx = GIT_ERAS.findIndex((e) => e.id === anchor);
+      if (eraIdx === -1) return eraY[anchor] ?? 0;
+      const era = GIT_ERAS[eraIdx];
+      const eraDotY = eraY[era.id] ?? 0;
+      if (year === undefined) return eraDotY;
+      const nextEra = GIT_ERAS[eraIdx + 1];
+      const nextDotY = nextEra ? eraY[nextEra.id] ?? eraDotY + 200 : eraDotY + 200;
+      // Map years against the visible card body, not the gap above the next dot.
+      // Each era ends with mb-20 (~80px); without subtracting it, ratio=1.0 lands
+      // on the next dot itself, leaving fork lanes nowhere to run before merging.
+      const eraGap = 80;
+      const cardEnd = Math.max(eraDotY + 60, nextDotY - eraGap);
+      const startYear = era.startYear;
+      const endYear = nextEra ? nextEra.startYear : startYear + 1;
+      if (endYear <= startYear) return eraDotY;
+      const ratio = Math.max(0, Math.min(1, (year - startYear) / (endYear - startYear)));
+      return eraDotY + ratio * (cardEnd - eraDotY);
+    };
 
     const allBranches = GIT_ERAS.flatMap((e) => e.branches ?? []);
     const newPaths: ComputedPath[] = [];
+    const newForkMarkers: ForkMarker[] = [];
+
+    // Per-path scroll progress mapping.
+    // useScroll uses offset ["start 80%", "end 20%"], so:
+    //   scrollYProgress = 0 when section's top is 20% from viewport bottom
+    //   scrollYProgress = 1 when section's bottom is 20% from viewport top
+    // Total scroll distance to traverse the section: containerHeight + 0.6 * viewportH.
+    // For a Y position M (in section coordinates, 0 = top), the moment when M is
+    // at viewport center corresponds to scrollYProgress = (M + 0.3*vh) / (sectionH + 0.6*vh).
+    const viewportH =
+      typeof window !== "undefined" ? window.innerHeight : 900;
+    const sectionH = cRect.height;
+    const totalProg = sectionH + viewportH * 0.6;
+    const progressAtY = (y: number) =>
+      Math.max(0, Math.min(1, (y + viewportH * 0.3) / totalProg));
 
     for (const b of allBranches) {
-      const fy = eraY[b.forkAt];
-      const my = eraY[b.mergeAt];
-      if (fy === undefined || my === undefined) continue;
+      // Use forkYear to position fork point proportionally within the era.
+      const fy = yAtYear(b.forkAt, b.forkYear);
       const color = accentHex[b.accent];
 
-      // Self-loop (Lovable): small excursion off trunk, no lane claim
+      // Self-merging branch with explicit mergeYear (Lovable): runs in its
+      // lane fork→lane→merge so the card stack visibly tethers to the trunk.
+      // The lane's vertical segment is anchored to the card's actual DOM rect
+      // so the lane visibly wraps the card — fork at the year on the trunk,
+      // run alongside the card, merge back at the card's bottom.
+      if (b.forkAt === b.mergeAt && b.mergeYear !== undefined) {
+        const lx = LANE_X[b.lane] ?? 72;
+        const reach = FORK_REACH;
+        const cardNode = branchCardNodes.current[b.id];
+        let my = yAtYear(b.mergeAt, b.mergeYear);
+        if (cardNode) {
+          const cardRect = cardNode.getBoundingClientRect();
+          const cardBottom = cardRect.bottom - cRect.top;
+          // Merge back at card bottom + a small tail so the curve resolves
+          // visibly past the card edge.
+          my = Math.max(my, cardBottom + 24);
+        }
+        const d = [
+          `M ${TRUNK_X} ${fy}`,
+          `C ${TRUNK_X} ${fy + reach / 2}, ${lx} ${fy + reach / 2}, ${lx} ${fy + reach}`,
+          `L ${lx} ${my - reach}`,
+          `C ${lx} ${my - reach / 2}, ${TRUNK_X} ${my - reach / 2}, ${TRUNK_X} ${my}`,
+        ].join(" ");
+        const fadeStart = progressAtY(fy - viewportH * 0.35);
+        const fadeEnd = progressAtY(my - viewportH * 0.15);
+        newPaths.push({ id: b.id, d, color, fadeStart, fadeEnd });
+        if (b.forkLabel) {
+          newForkMarkers.push({
+            id: b.id,
+            y: fy,
+            color,
+            label: b.forkLabel,
+            fadeStart,
+          });
+        }
+        continue;
+      }
+
+      const my = eraY[b.mergeAt];
+      if (my === undefined) continue;
+
+      // Legacy self-loop fallback (no branch uses this path now, but kept for
+      // forward compatibility if a branch wants the small LOOP_X excursion).
       if (b.forkAt === b.mergeAt) {
         const loopH = b.loopHeight ?? 100;
-        const startY = fy + 20;
+        const startY = fy;
         const endY = startY + loopH;
         const apexY = startY + loopH / 2;
         const d = [
@@ -1026,7 +2039,18 @@ function GitTimeline() {
           `L ${LOOP_X} ${apexY + 14}`,
           `C ${LOOP_X} ${endY - 14}, ${TRUNK_X} ${endY - 14}, ${TRUNK_X} ${endY}`,
         ].join(" ");
-        newPaths.push({ id: b.id, d, color });
+        const fadeStart = progressAtY(startY - viewportH * 0.4);
+        const fadeEnd = progressAtY(endY - viewportH * 0.1);
+        newPaths.push({ id: b.id, d, color, fadeStart, fadeEnd });
+        if (b.forkLabel) {
+          newForkMarkers.push({
+            id: b.id,
+            y: startY,
+            color,
+            label: b.forkLabel,
+            fadeStart,
+          });
+        }
         continue;
       }
 
@@ -1045,21 +2069,50 @@ function GitTimeline() {
           `L ${lx} ${my - mergeReach}`,
           `C ${lx} ${c1y}, ${TRUNK_X} ${c2y}, ${TRUNK_X} ${my}`,
         ].join(" ");
-        newPaths.push({ id: b.id, d, color });
+        const fadeStart = 0;
+        const fadeEnd = progressAtY(my - viewportH * 0.15);
+        newPaths.push({ id: b.id, d, color, fadeStart, fadeEnd });
         continue;
       }
 
-      // Standard branch: fork curve → vertical lane → dramatic merge funnel
+      // Clamp fy so the lane has at least a small visible run before the merge
+      // funnel begins. Without this, late forkYears produce a backward zig-zag
+      // path (lane "runs up" then funnels down) — the "appears from nowhere"
+      // bug at the convergence end of the timeline.
+      const minLaneRun = 24;
+      const maxFy = my - mergeReach - FORK_REACH - minLaneRun;
+      const fyDraw = Math.min(fy, Math.max(0, maxFy));
+
+      // Standard branch: fork curve at year-mapped Y → vertical lane → merge funnel
       const d = [
-        `M ${TRUNK_X} ${fy}`,
-        `C ${TRUNK_X} ${fy + FORK_REACH / 2}, ${lx} ${fy + FORK_REACH / 2}, ${lx} ${fy + FORK_REACH}`,
+        `M ${TRUNK_X} ${fyDraw}`,
+        `C ${TRUNK_X} ${fyDraw + FORK_REACH / 2}, ${lx} ${fyDraw + FORK_REACH / 2}, ${lx} ${fyDraw + FORK_REACH}`,
         `L ${lx} ${my - mergeReach}`,
         `C ${lx} ${c1y}, ${TRUNK_X} ${c2y}, ${TRUNK_X} ${my}`,
       ].join(" ");
-      newPaths.push({ id: b.id, d, color });
+      // Branches that merge at the final convergence get more lookahead so the
+      // viewer sees them draw before reaching the merge — avoids the late-page
+      // "everything pops in at once" feeling.
+      const lookahead = isFinalMerge ? 0.55 : 0.35;
+      const fadeStart = progressAtY(fyDraw - viewportH * lookahead);
+      const fadeEnd = progressAtY(my - viewportH * 0.2);
+      newPaths.push({ id: b.id, d, color, fadeStart, fadeEnd });
+
+      // Fork commit marker on the trunk — small dot + year label,
+      // visible only when branch has explicit forkYear/forkLabel.
+      if (b.forkLabel) {
+        newForkMarkers.push({
+          id: b.id,
+          y: fyDraw,
+          color,
+          label: b.forkLabel,
+          fadeStart,
+        });
+      }
     }
 
     setPaths(newPaths);
+    setForkMarkers(newForkMarkers);
   }, []);
 
   useEffect(() => {
@@ -1116,25 +2169,24 @@ function GitTimeline() {
             style={{ overflow: "visible" }}
           >
             {paths.map((p) => (
-              <motion.path
-                key={p.id}
-                d={p.d}
-                stroke={p.color}
-                strokeWidth={2}
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ pathLength: scrollYProgress, opacity: 0.85 }}
-              />
+              <BranchPath key={p.id} data={p} scrollYProgress={scrollYProgress} />
             ))}
           </svg>
         )}
+        {/* Fork commit markers — small year-tagged dots on the trunk
+            where branches peel off (Striker 2022, Lovable Aug 2025, etc.) */}
+        {forkMarkers.map((m) => (
+          <ForkMarkerView key={m.id} marker={m} scrollYProgress={scrollYProgress} />
+        ))}
+        {/* Origin story — git init terminal cinematic before EPFL */}
+        <OriginIntro setEraRef={getEraRef("origin")} />
         {GIT_ERAS.map((era, i) => (
           <EraNode
             key={era.id}
             era={era}
             isLast={i === GIT_ERAS.length - 1}
             setEraRef={getEraRef(era.id)}
+            getBranchCardRef={getBranchCardRef}
           />
         ))}
       </div>
