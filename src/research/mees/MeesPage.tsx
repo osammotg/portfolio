@@ -1027,14 +1027,14 @@ function AutonomousDeploymentsSection() {
           {...fadeUp(0.1)}
           className="rounded-2xl border border-white/[0.07] bg-black overflow-hidden flex flex-col"
         >
-          <div className="flex-1 flex items-center justify-center min-h-[360px]">
+          <div className="relative w-full aspect-[2/3] overflow-hidden">
             <video
               src="/towel-folding.mp4"
               autoPlay
               loop
               muted
               playsInline
-              className="block max-w-full max-h-[560px] w-auto h-auto"
+              className="absolute inset-0 w-full h-full object-cover object-top"
             />
           </div>
           <figcaption className="px-4 py-2.5 text-[11px] text-muted/80 border-t border-white/[0.06] font-mono leading-snug">
@@ -1046,14 +1046,14 @@ function AutonomousDeploymentsSection() {
           {...fadeUp(0.18)}
           className="rounded-2xl border border-white/[0.07] bg-black overflow-hidden flex flex-col"
         >
-          <div className="flex-1 flex items-center justify-center min-h-[360px]">
+          <div className="relative w-full aspect-[2/3] overflow-hidden">
             <video
               src="/carton-box.mp4"
               autoPlay
               loop
               muted
               playsInline
-              className="block max-w-full max-h-[560px] w-auto h-auto"
+              className="absolute inset-0 w-full h-full object-cover object-top"
             />
           </div>
           <figcaption className="px-4 py-2.5 text-[11px] text-muted/80 border-t border-white/[0.06] font-mono leading-snug">
