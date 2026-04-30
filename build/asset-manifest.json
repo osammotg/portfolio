@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.defe8c49.css",
-    "main.js": "/static/js/main.ddcbe7f7.js",
+    "main.css": "/static/css/main.034344b1.css",
+    "main.js": "/static/js/main.9a5292bd.js",
     "static/js/453.a75f356f.chunk.js": "/static/js/453.a75f356f.chunk.js",
     "static/media/winners.png": "/static/media/winners.5aae6669265c5138b661.png",
     "static/media/group.png": "/static/media/group.97db90e6f81edf0af9dd.png",
@@ -39,12 +39,12 @@
     "static/media/atomic_habits.jpg": "/static/media/atomic_habits.1e9739efe6a8eca8240a.jpg",
     "static/media/rich_dad_poor_dad.jpg": "/static/media/rich_dad_poor_dad.3e652088b5ec2c6f8709.jpg",
     "index.html": "/index.html",
-    "main.defe8c49.css.map": "/static/css/main.defe8c49.css.map",
-    "main.ddcbe7f7.js.map": "/static/js/main.ddcbe7f7.js.map",
+    "main.034344b1.css.map": "/static/css/main.034344b1.css.map",
+    "main.9a5292bd.js.map": "/static/js/main.9a5292bd.js.map",
     "453.a75f356f.chunk.js.map": "/static/js/453.a75f356f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.defe8c49.css",
-    "static/js/main.ddcbe7f7.js"
+    "static/css/main.034344b1.css",
+    "static/js/main.9a5292bd.js"
   ]
 }

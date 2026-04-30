@@ -1018,7 +1018,7 @@ function AutonomousDeploymentsSection() {
         </h2>
         <ol className="text-fg/85 text-base space-y-1.5 font-mono">
           <li><span className="text-muted/60 mr-2">1.</span>Towel folding</li>
-          <li><span className="text-muted/60 mr-2">2.</span>GPU ventilator into a carton box and closing it <span className="text-muted/60">— currently being deployed</span></li>
+          <li><span className="text-muted/60 mr-2">2.</span>GPU ventilator into a carton box and closing it</li>
         </ol>
       </motion.div>
 
@@ -1044,17 +1044,21 @@ function AutonomousDeploymentsSection() {
 
         <motion.figure
           {...fadeUp(0.18)}
-          className="rounded-2xl border border-dashed border-accent-fuchsia/35 bg-accent-fuchsia/[0.04] overflow-hidden flex flex-col items-center justify-center min-h-[360px] p-8"
+          className="rounded-2xl border border-white/[0.07] bg-black overflow-hidden flex flex-col"
         >
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border border-accent-fuchsia/45 bg-accent-fuchsia/[0.14] mb-5">
-            <Play className="h-5 w-5 ml-0.5 text-accent-fuchsia" />
+          <div className="flex-1 flex items-center justify-center min-h-[360px]">
+            <video
+              src="/carton-box.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="block max-w-full max-h-[560px] w-auto h-auto"
+            />
           </div>
-          <p className="text-sm text-fg/70 text-center max-w-[260px] leading-relaxed">
-            GPU ventilator into a carton box and closing it
-          </p>
-          <p className="text-[11px] text-muted/60 text-center mt-2 font-mono uppercase tracking-[0.25em]">
-            Currently being deployed
-          </p>
+          <figcaption className="px-4 py-2.5 text-[11px] text-muted/80 border-t border-white/[0.06] font-mono leading-snug">
+            02 · GPU ventilator into a carton box — deployed ACT policy
+          </figcaption>
         </motion.figure>
       </div>
     </section>
