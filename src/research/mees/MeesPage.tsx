@@ -189,6 +189,7 @@ const PIPELINE = [
     ],
     tags: ["CAN bus", "RealSense", "OpenCV", "fiducials", "uv", "Python"],
     video: "/yams-setup-check.mp4" as string | null,
+    videoOverlay: "Built a setup check that turned 2-hour debug sessions into 10 seconds — the whole robot learning team runs it every session.",
     code: null as string | null,
     wideImages: [
       {
@@ -202,6 +203,18 @@ const PIPELINE = [
         src: "/teleop-performing.mp4",
         alt: "Recording bimanual teleoperation episodes on YAMS",
         caption: "Recording teleoperation episodes with the leader arms.",
+      },
+      {
+        kind: "image" as const,
+        src: "/cad-leader-arm-1.jpeg",
+        alt: "CAD render of the YAMS leader arm — redesigned by the hardware team",
+        caption: "Leader arm — Left",
+      },
+      {
+        kind: "image" as const,
+        src: "/cad-leader-arm-2.jpeg",
+        alt: "CAD render of the YAMS leader arm variant — redesigned by the hardware team",
+        caption: "Leader arm — Right",
       },
     ] as { kind: "image" | "video"; src: string; alt: string; caption?: string }[] | undefined,
   },
@@ -406,9 +419,9 @@ const GIT_ERAS: EraData[] = [
       {
         id: "waterpolo",
         title: "Water Polo — 12 Years Semi-Pro",
-        eyebrow: "🇨🇭 Geneva 2011 → 2023 · 3rd place 🥉 · closes at SF",
+        eyebrow: "🇨🇭 Geneva 2011 → 2023 · 3rd place 🥉",
         accent: "cyan",
-        description: "Started in 2011 in Geneva. Twelve years competitive, ran through high school and BSc. Won 3rd place in the Swiss National League. Closes when Special Forces opens — the discipline thread continues, just no longer in a pool.",
+        description: "Started in 2011 in Geneva. Twelve years competitive, through high school and my BSc. 3rd place in the Swiss National League. Played several years for the Swiss national team across international tournaments, peaking at the European Cup qualifiers against professional teams. The lesson: results come from teamwork and discipline.",
         summary: [
           "12 years competitive · started 2011 in Geneva",
           "🥉 3rd place — Swiss National League",
@@ -460,15 +473,15 @@ const GIT_ERAS: EraData[] = [
     startYear: 2024,
     eyebrow: "🇨🇭 Isone · Swiss Armed Forces · Grenadier corps",
     accent: "green",
-    title: "Special Forces — Test the Limits",
+    title: "Special Forces — Test My Limits",
     description:
       "Did my military duty between EPFL and ETH. Chose the hardest path in the Swiss army: Special Forces, Grenadier corps in Isone. The point was simple: grow, and find the real edge of my physical and mental limits. Honestly, it was a really nice experience. Came out with a different baseline for what 'hard' actually means and carried it into everything that came next.",
-    summary: ["Chose the hardest path on offer to find the real limits"],
+    summary: ["Chose the hardest military path to find my physical and mental limits."],
     items: [
       "Swiss Special Forces · Grenadier corps · Isone, Ticino",
       "Why: chose the hardest path on offer",
       "Test the limits — physical and mental",
-      "Water polo (12 yrs) closes here · Striker keeps running",
+      "Kept my start-up Stryker running on the weekends.",
     ],
     bgImage: "/military-bg.jpeg",
   },
@@ -523,15 +536,15 @@ const GIT_ERAS: EraData[] = [
         title: "Lovable — PX Engineer (shipped & merged)",
         eyebrow: "Stockholm · Aug → Sep 2025 · feature branch closed",
         accent: "fuchsia",
-        description: "Started my internship at Lovable in August 2025 — cold-messaged the founder after a hackathon, thought it was a cool company, he said yes. Shipped fast. Left in September to go to the U.S.",
+        description: "Convinced the founder Anton Osika to let me work for Lovable after a hackathon. By far the best startup I have worked at — but I wasn't doing something I loved. Day-to-day: finding issues in their AI agent and reporting them to the Core Tech team, and automating repetitive support tasks with Fin.ai (Intercom). Left in September for the U.S.",
         summary: [
-          "Cold-messaged the founder · automated 120+ hrs",
+          "Convinced Anton Osika to bring me on · automated 120+ hrs",
           "Stockholm · Aug → Sep 2025",
         ],
         items: [
-          "Cold-messaged the founder after the hackathon",
-          "Goal Clarification Mode (GCM) design",
-          "Automated 120+ hrs of support workflows",
+          "Convinced the founder Anton Osika to let me join after a hackathon",
+          "Found issues in the AI agent · reported to Core Tech team",
+          "Automated 120+ hrs of repetitive support tasks using Fin.ai (Intercom)",
         ],
         logo: { src: "/logos/lovable.png", alt: "Lovable" },
         forkAt: "ep02",
@@ -552,16 +565,16 @@ const GIT_ERAS: EraData[] = [
         title: "Stack Auth — San Francisco Detour",
         eyebrow: "San Francisco · YC S24 · Sep – Dec 2025",
         accent: "indigo",
-        description: "Got passionate about entrepreneurship and went to SF. Worked inside the YC S24 ecosystem. Came back knowing exactly what to do next.",
+        description: "After Lovable, I joined Stack Auth — a contract I had already signed. A smaller startup living in a hacker house, working the San Francisco 996. By far the best experience. Responsible for implementing the MCP tool so vibe coders could access the right documentation. Hosted four hackathons to test features we built along the way. Came back knowing exactly what to do next.",
         summary: [
           "Implemented MCP · 4 dev hackathons led",
           "San Francisco · YC S24 detour",
         ],
         items: [
-          "Implemented Model Context Protocol (MCP)",
-          "4 developer hackathons organised & led",
-          "YCombinator S24 cohort — first-hand",
-          "Returned: one mission — robotics",
+          "Joined Stack Auth after Lovable — contract already signed",
+          "Lived in a hacker house — San Francisco 996",
+          "Implemented MCP so vibe coders could access correct documentation",
+          "Hosted 4 hackathons to test features built before and during",
         ],
         stat: "YC S24",
         logo: { src: "/logos/stackauth.png", alt: "Stack Auth" },
@@ -577,23 +590,23 @@ const GIT_ERAS: EraData[] = [
   {
     id: "ep04",
     ep: "04",
-    year: "Sep 2025 – Present",
-    startYear: 2025.7,
+    year: "2026 – Present",
+    startYear: 2026,
     eyebrow: "ETH Robotics Club · Robot Learning · merge commit · all roads",
     accent: "fuchsia",
     title: "Robot Learning Team — 24/7, All In",
     description:
-      "Every prior thread merges here. Bought a van and parked it at the lab. Sleep on-site, eat on-site, build on-site. Football, startups, side projects, San Francisco — all of it folded into one mission: become a really good robotics engineer. This is the only thing now.",
+      "I knew I wanted to become a great robotics engineer, but wasn't sure what in robotics interested me most. Joined the ETH Robotics Club to find out — starting as an honorary member, becoming an active one. Saw real potential in the Robot Learning team and stayed. Since then, working every day with the team on implementations and advanced papers. Every prior thread merges here.",
     summary: [
-      "10× faster training data loader (logged, lossless validated)",
-      "All threads merge here — 24/7 on-site at the lab",
+      "🚐 Living 24/7 on-site in my van",
+      "Goal: understand robot learning end-to-end and publish at least 1 paper",
     ],
     items: [
-      "24/7 on-site at ETH Robotics Club — van as base camp",
+      "Living at the robotics hangar in my van, on-site at the lab",
+      "Goal this semester: become a great robot learning engineer and complete my semester project",
       "YAMS: rebuilt control loop 30 → 120 Hz (106 commits)",
       "Bimanual data pipeline: 863 curated demos across 9 datasets",
       "Fast data loader: 110 ms → 9 ms per step, lossless validated",
-      "Cosmos fine-tuning started — building toward mimic-video on YAMS",
       "Papers absorbed: ACT, World Models, mimic-video, CoRL 2025",
     ],
     stat: "10×",
@@ -610,7 +623,7 @@ const MEES_PAPERS: {
   shortLabel: string;
   title: string;
   venue: string;
-  summary: string;
+  tagline: string;
   url: string;
   accent: AccentKey;
 }[] = [
@@ -618,8 +631,7 @@ const MEES_PAPERS: {
     shortLabel: "ECoT",
     title: "Robotic Control via Embodied Chain-of-Thought Reasoning",
     venue: "CoRL 2024",
-    summary:
-      "VLAs that reason — plans, sub-tasks, motions, grounded features like bounding boxes — before predicting actions. +28% absolute success on OpenVLA generalization, no extra robot data.",
+    tagline: "Teaches robots to reason out loud before acting — chain-of-thought planning grounded in what the robot sees.",
     url: "https://arxiv.org/abs/2407.08693",
     accent: "purple",
   },
@@ -627,18 +639,15 @@ const MEES_PAPERS: {
     shortLabel: "Training Strategies",
     title: "Training Strategies for Efficient Embodied Reasoning",
     venue: "CoRL 2025 · 28 Jul 2025",
-    summary:
-      "Follow-up to ECoT: how to actually train embodied reasoners efficiently. Reasoning chains, supervision signals, and what to skip when the model has to run on the robot.",
+    tagline: "The follow-up on how to actually train reasoning robots efficiently enough to run on real hardware.",
     url: "https://www.oiermees.com",
     accent: "fuchsia",
   },
   {
     shortLabel: "FAST",
-    title:
-      "FAST: Efficient Action Tokenization for Vision-Language-Action Models",
+    title: "FAST: Efficient Action Tokenization for Vision-Language-Action Models",
     venue: "Preprint · 16 Jan 2025",
-    summary:
-      "Frequency-domain action tokenization that gets VLAs running fast enough to be useful. The piece a lot of post-FAST work assumes; reframes how action heads are even built.",
+    tagline: "A new action tokenization approach that makes vision-language-action models fast enough to be practically useful.",
     url: "https://www.oiermees.com",
     accent: "indigo",
   },
@@ -655,8 +664,8 @@ const MIMIC_VIDEO_PAPER = {
   title:
     "mimic-video: Video-Action Models for Generalizable Robot Control Beyond VLAs",
   venue: "Preprint · 17 Dec 2025",
-  summary:
-    "Video-action models that generalize beyond what current VLAs can do. The architecture maps a video backbone (Cosmos) into action tokens via an inverse-dynamics decoder, sidestepping the VLA bottleneck for long-horizon, contact-rich tasks.",
+  tagline:
+    "Video-action models that learn robot control from video demonstrations — generalizing further than current VLAs can.",
   alreadyDoing:
     "We started fine-tuning Cosmos on our own YAMS bimanual data before your team's repo went public. The past weeks I've been reading the paper end-to-end, walking the code with the team at the Robotics Club, and lining up the IDM training loop on top of our pipeline. This isn't a direction I'm proposing — it's the one we're already running.",
   url: "https://www.oiermees.com",
@@ -725,44 +734,14 @@ function ProofSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_30%,rgba(229,9,20,0.05),transparent)]" />
 
       <motion.div {...fadeUp(0)} className="mb-12">
-        <SectionEyebrow>Proof</SectionEyebrow>
+        <SectionEyebrow>Academic record</SectionEyebrow>
         <h2 className="font-playfair text-4xl font-bold tracking-tight sm:text-5xl mb-4">
-          What I&apos;ve already shipped
+          MSc Mechanical Engineering
         </h2>
         <p className="text-muted max-w-2xl text-base leading-relaxed">
-          Concrete infrastructure I helped ship at the ETH Robotics Club this
-          semester.
+          ETH Zurich · M4 · graded on the Swiss 1–6 scale.
         </p>
       </motion.div>
-
-      {/* Evidence pillars — 3 stats with one-line context. No bg images.
-          The whole point of this section is fast skim, not decoration. */}
-      <div className="grid gap-4 md:grid-cols-3 mb-12">
-        {PROOF_POINTS.map((p, i) => {
-          const c = accentColors[p.accent];
-          return (
-            <motion.div
-              key={p.label}
-              {...fadeScale(0.05 + i * 0.07)}
-              className={`relative rounded-2xl border ${c.border} bg-white/[0.025] p-7 h-full`}
-            >
-              <span
-                className={`font-playfair text-5xl font-bold leading-none ${c.text}`}
-              >
-                {p.stat}
-              </span>
-              <p
-                className={`text-[11px] uppercase tracking-[0.3em] mt-3 ${c.text}`}
-              >
-                {p.label}
-              </p>
-              <p className="text-base text-fg/80 leading-relaxed mt-4">
-                {p.body}
-              </p>
-            </motion.div>
-          );
-        })}
-      </div>
 
       {/* Academic record — visible by default, formatted as a clean table. */}
       <motion.div {...fadeUp(0.1)}>
@@ -842,6 +821,69 @@ function CodeLine({ tokens }: { tokens: CodeToken[] }) {
   );
 }
 
+// ─── Video overlay — expands right-to-left on enter ──────────────────────────
+
+function VideoOverlay({ text }: { text: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [triggered, setTriggered] = useState(false);
+  const [displayed, setDisplayed] = useState("");
+  const [typing, setTyping] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setTriggered(true); io.disconnect(); } },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Start typing after bar finishes expanding (0.5s delay + 1.5s expansion = 2s)
+  useEffect(() => {
+    if (!triggered) return;
+    const startDelay = setTimeout(() => setTyping(true), 2000);
+    return () => clearTimeout(startDelay);
+  }, [triggered]);
+
+  useEffect(() => {
+    if (!typing) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+      if (i >= text.length) clearInterval(interval);
+    }, 28);
+    return () => clearInterval(interval);
+  }, [typing, text]);
+
+  return (
+    <div ref={ref} className="absolute inset-0 pointer-events-none overflow-hidden">
+      <motion.div
+        className="absolute bottom-0 right-0 bg-black/80 backdrop-blur-md border-t border-l border-white/10 px-4 py-2.5 font-mono text-[11px] leading-relaxed text-[#4ade80]/90 overflow-hidden"
+        initial={{ width: "2.5rem" }}
+        animate={triggered ? { width: "100%" } : { width: "2.5rem" }}
+        transition={{ duration: 1.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.5 }}
+      >
+        {/* Collapsed indicator dot */}
+        <motion.span
+          className="absolute right-3.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#4ade80]/70"
+          animate={triggered ? { opacity: 0, scale: 0 } : { opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2, delay: triggered ? 0.4 : 0 }}
+        />
+        {/* Typewriter text + blinking cursor */}
+        <span>
+          {displayed}
+          {typing && displayed.length < text.length && (
+            <span className="animate-pulse">▌</span>
+          )}
+        </span>
+      </motion.div>
+    </div>
+  );
+}
+
 // ─── Robotics Pipeline Section ────────────────────────────────────────────────
 
 const accentColors: Record<AccentKey, { border: string; bg: string; text: string; glow: string }> = {
@@ -911,6 +953,9 @@ function RoboticsPipelineSection() {
                         playsInline
                         className="block w-full h-auto"
                       />
+                      {(step as any).videoOverlay && (
+                        <VideoOverlay text={(step as any).videoOverlay} />
+                      )}
                     </div>
                   )}
 
@@ -965,7 +1010,7 @@ function RoboticsPipelineSection() {
                     {step.wideImages.map((m) => (
                       <figure
                         key={m.src}
-                        className="rounded-2xl border border-white/[0.07] bg-black/40 overflow-hidden"
+                        className="rounded-2xl border border-white/[0.07] bg-black/40 overflow-hidden flex flex-col"
                       >
                         {m.kind === "video" ? (
                           <video
@@ -977,12 +1022,14 @@ function RoboticsPipelineSection() {
                             className="block w-full h-auto"
                           />
                         ) : (
-                          <img
-                            src={m.src}
-                            alt={m.alt}
-                            loading="lazy"
-                            className="block w-full h-auto"
-                          />
+                          <div className="flex-1 min-h-0 overflow-hidden">
+                            <img
+                              src={m.src}
+                              alt={m.alt}
+                              loading="lazy"
+                              className="block w-full h-full object-cover"
+                            />
+                          </div>
                         )}
                         {m.caption && (
                           <figcaption className="px-4 py-2.5 text-[11px] text-muted/80 border-t border-white/[0.06] font-mono leading-snug">
@@ -2462,20 +2509,8 @@ function GitTimeline() {
         <SectionEyebrow>Before the science · who is this guy</SectionEyebrow>
         <h2 className="font-playfair text-5xl font-bold tracking-tight sm:text-6xl leading-[1.05]">
           How I got here
-          <br />
-          <span className="text-muted/70 font-normal">is my git story.</span>
         </h2>
-        <p className="mt-5 text-base text-muted max-w-xl leading-relaxed">
-          Every era is a commit. Every parallel thread is a real branch
-          (water polo, Striker, Special Forces, Lovable, the YC detour, side
-          projects). They diverge, run their course, and merge into the
-          ETH Robotics Club, where I am right now.
-          <br />
-          <span className="font-mono text-xs text-muted/60 mt-2 inline-block">
-            git log --graph --all
-          </span>
-        </p>
-        <p className="mt-3 text-xs text-muted/50 max-w-xl">
+        <p className="mt-5 text-xs text-muted/50 max-w-xl">
           Click any era or branch to expand it. The science is below.
         </p>
       </motion.div>
@@ -2916,7 +2951,7 @@ export default function MeesPage() {
                   {MIMIC_VIDEO_PAPER.title}
                 </h3>
                 <p className="text-base text-fg/80 leading-relaxed">
-                  {MIMIC_VIDEO_PAPER.summary}
+                  {MIMIC_VIDEO_PAPER.tagline}
                 </p>
               </div>
 
@@ -2965,7 +3000,7 @@ export default function MeesPage() {
                     </span>
                   </div>
                   <h3 className="font-playfair text-lg font-bold leading-snug">{p.title}</h3>
-                  <p className="text-sm text-muted leading-relaxed flex-1">{p.summary}</p>
+                  <p className="text-sm text-muted leading-relaxed flex-1">{p.tagline}</p>
                   <p className={`text-xs font-mono border-t border-white/[0.06] pt-3 ${c.text} group-hover:text-white transition-colors`}>
                     Read the paper →
                   </p>
