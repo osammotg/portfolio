@@ -4,6 +4,7 @@ import { FaLinkedin, FaGithub } from "react-icons/fa";
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import SplineViewer from "../../components/SplineViewer";
 import WaterPoloCard from "./WaterPoloCard";
+import posthog from 'posthog-js';
 
 const SPLINE_SCENE =
   "https://my.spline.design/nexbotrobotcharacterconceptforpersonaluse-ABbfTCXAkIulvE46geZHQMFx/";
@@ -65,7 +66,7 @@ function useTypewriter(text: string, speed: number, active: boolean) {
 }
 
 const WHY_TEXT =
-`I want to become an amazing robot learning engineer and you and your research lab seem to be the best in Zurich by far.`;
+`Your Robot Learning class this semester made it concrete — this is what I want to specialize in. I've been building toward the mimic-video direction at the Robotics Club all semester, and I want to keep going, learning from you directly.`;
 
 // ─── Animation helpers ────────────────────────────────────────────────────────
 
@@ -497,17 +498,7 @@ const GIT_ERAS: EraData[] = [
     summary: ["Decision: become a really good robotics engineer"],
     bgImage: "/eth-campus.jpg",
     logo: { src: "/logos/eth.svg", alt: "ETH Zurich" },
-    items: [
-      "Planning & Decision Making for Autonomous Robots — 6.0",
-      "Image Analysis and Computer Vision — 5.0",
-      "Mobile Health and Activity Monitoring — 5.5",
-      "Visualization, Simulation & VR I — 5.5",
-      "Dynamic Programming and Optimal Control — 4.75",
-      "Robot Dynamics — 4.5",
-      "Introduction to Machine Learning — 4.5",
-      "Russian for Insiders (A2-C1) — 5.25",
-      "Robot Learning 263-5911-00L — Mees, Spring 2026",
-    ],
+    items: [],
     branches: [
       {
         id: "ai-side",
@@ -640,7 +631,7 @@ const MEES_PAPERS: {
     title: "Training Strategies for Efficient Embodied Reasoning",
     venue: "CoRL 2025 · 28 Jul 2025",
     tagline: "The follow-up on how to actually train reasoning robots efficiently enough to run on real hardware.",
-    url: "https://www.oiermees.com",
+    url: "https://arxiv.org/abs/2506.04669",
     accent: "fuchsia",
   },
   {
@@ -648,7 +639,7 @@ const MEES_PAPERS: {
     title: "FAST: Efficient Action Tokenization for Vision-Language-Action Models",
     venue: "Preprint · 16 Jan 2025",
     tagline: "A new action tokenization approach that makes vision-language-action models fast enough to be practically useful.",
-    url: "https://www.oiermees.com",
+    url: "https://arxiv.org/abs/2501.09747",
     accent: "indigo",
   },
 ];
@@ -668,7 +659,7 @@ const MIMIC_VIDEO_PAPER = {
     "Video-action models that learn robot control from video demonstrations — generalizing further than current VLAs can.",
   alreadyDoing:
     "We started fine-tuning Cosmos on our own YAMS bimanual data before your team's repo went public. The past weeks I've been reading the paper end-to-end, walking the code with the team at the Robotics Club, and lining up the IDM training loop on top of our pipeline. This isn't a direction I'm proposing — it's the one we're already running.",
-  url: "https://www.oiermees.com",
+  url: "https://arxiv.org/abs/2412.13877",
 };
 
 // ─── Proof section data ───────────────────────────────────────────────────────
@@ -1244,7 +1235,7 @@ function BranchCard({ branch, delay = 0 }: { branch: BranchData; delay?: number 
           {/* Expand toggle — opens hero photo + full description + items */}
           <ExpandToggle
             expanded={expanded}
-            onClick={() => setExpanded((e) => !e)}
+            onClick={() => { const next = !expanded; setExpanded(next); if (next) posthog.capture('branch_expanded', { branch: branch.id, title: branch.title }); }}
           />
 
           <ExpandableSection expanded={expanded}>
@@ -1475,8 +1466,6 @@ function highlightKeywords(text: string): React.ReactNode[] {
   );
 }
 
-// Preserved for the graveyard — see end-of-file comment block.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OriginIntro({ setEraRef }: { setEraRef?: (node: HTMLDivElement | null) => void }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-15% 0px" });
@@ -1525,8 +1514,6 @@ function OriginIntro({ setEraRef }: { setEraRef?: (node: HTMLDivElement | null) 
       ? "M " + litCities.map((c) => `${c.coords.x} ${c.coords.y}`).join(" L ")
       : "";
   const planePos = activeData?.coords ?? ORIGIN_STEPS[0].coords;
-
-  const allLangsDone = step >= ORIGIN_STEPS.length - 1 && cmdComplete;
 
   // Year fraction within the OriginIntro span: 2001 (init) → 2020 (EPFL start).
   // Used both here (CSS calc) and inside yAtYear("origin") so a fork at year Y
@@ -1772,49 +1759,28 @@ function OriginIntro({ setEraRef }: { setEraRef?: (node: HTMLDivElement | null) 
           </div>
         </motion.div>
 
-        {/* Compact languages chip row — fills as commits land */}
-        <div className="mt-4 flex flex-wrap gap-1.5">
+        {/* Languages — 2-column grid, fills as commits land */}
+        <div className="mt-5 grid grid-cols-2 gap-2 max-w-sm">
           <AnimatePresence initial={false}>
             {allLangs.map((l) => (
-              <motion.span
+              <motion.div
                 key={l.lang}
                 layout
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, ease }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.025] px-2.5 py-1 text-[11px] text-fg/70"
+                className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3"
               >
-                <span className="text-sm leading-none">{l.flag}</span>
-                <span>{l.lang}</span>
-                <span className="text-[8.5px] font-mono uppercase tracking-wider text-fg/35">
-                  {l.level}
-                </span>
-              </motion.span>
+                <span className="text-2xl leading-none">{l.flag}</span>
+                <div>
+                  <p className="text-sm font-medium text-fg/90 leading-none mb-1">{l.lang}</p>
+                  <p className="text-[10px] font-mono uppercase tracking-wider text-fg/40">{l.level}</p>
+                </div>
+              </motion.div>
             ))}
           </AnimatePresence>
         </div>
-
-        {/* Why microengineering? — slides in once the cinematic ends.
-            Bridges the origin story into the EPFL era below. */}
-        {allLangsDone && (
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease }}
-            className="mt-4 rounded-xl border border-white/10 bg-white/[0.025] p-4 max-w-2xl"
-          >
-            <div className="text-[9px] uppercase tracking-[0.25em] text-fg/45 mb-2">
-              why microengineering?
-            </div>
-            <p className="text-[12.5px] text-fg/80 leading-relaxed">
-              Big technology. Passionate entrepreneur. Everything combines into{" "}
-              <span className="text-[#ff7043] font-semibold">robotics</span>.
-              That&rsquo;s why I chose{" "}
-              <span className="text-[#ff7043] font-semibold">microengineering at EPFL</span>.
-            </p>
-          </motion.div>
-        )}
       </div>
     </div>
   );
@@ -1837,7 +1803,8 @@ function EraNode({
   const hex = accentHex[era.accent];
   const hasBranches = (era.branches?.length ?? 0) > 0;
   const isLg = useIsLg();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(era.id === "sf");
+  const [gradesOpen, setGradesOpen] = useState(false);
 
   const attachRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -1985,7 +1952,7 @@ function EraNode({
         {/* Expand toggle — opens hero photo + full description + items + stat */}
         <ExpandToggle
           expanded={expanded}
-          onClick={() => setExpanded((e) => !e)}
+          onClick={() => { const next = !expanded; setExpanded(next); if (next) posthog.capture('era_expanded', { era: era.id, title: era.title }); }}
           className="mb-2"
         />
 
@@ -2022,17 +1989,56 @@ function EraNode({
               {era.description}
             </p>
 
-            <div className="space-y-2">
-              {era.items.map((item, j) => (
-                <div
-                  key={j}
-                  className="flex items-center gap-2.5 text-[15px] text-fg/80"
+            {era.items.length > 0 && (
+              <div className="space-y-2">
+                {era.items.map((item, j) => (
+                  <div
+                    key={j}
+                    className="flex items-center gap-2.5 text-[15px] text-fg/80"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: hex }} />
+                    {item}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {era.id === "ep02" && (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setGradesOpen((v) => !v)}
+                  aria-expanded={gradesOpen}
+                  className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-mono uppercase tracking-[0.2em] transition-all duration-200 ${
+                    gradesOpen
+                      ? "border-amber-400/55 bg-amber-400/[0.10] text-amber-400"
+                      : "border-white/15 bg-white/[0.04] text-fg/70 hover:border-amber-400/40 hover:bg-amber-400/[0.08] hover:text-amber-400"
+                  }`}
                 >
-                  <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: hex }} />
-                  {item}
-                </div>
-              ))}
-            </div>
+                  <span>{gradesOpen ? "Hide grades" : "See my grades"}</span>
+                  {gradesOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                </button>
+                <ExpandableSection expanded={gradesOpen}>
+                  <div className="mt-3 rounded-xl border border-white/[0.07] bg-black/40 overflow-hidden">
+                    <table className="w-full text-left">
+                      <tbody>
+                        {ETH_GRADES.map((g, i) => (
+                          <tr
+                            key={g.course}
+                            className={i === ETH_GRADES.length - 1 ? "" : "border-b border-white/[0.05]"}
+                          >
+                            <td className="px-4 py-2.5 text-sm text-fg/80 leading-snug pr-4">{g.course}</td>
+                            <td className={`px-4 py-2.5 text-right font-mono tabular-nums whitespace-nowrap text-sm ${g.inProgress ? "text-accent-cyan italic" : "text-white font-medium"}`}>
+                              {g.grade}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </ExpandableSection>
+              </div>
+            )}
 
             {era.stat && (
               <div
@@ -2545,13 +2551,8 @@ function GitTimeline() {
         {forkMarkers.map((m) => (
           <ForkMarkerView key={m.id} marker={m} scrollYProgress={scrollYProgress} />
         ))}
-        {/* Origin story — git init terminal cinematic before EPFL.
-            Commented out during the simplification refactor. The component
-            (~600 lines: animated map + paper-plane motion path + typewriter
-            terminal) is preserved at the bottom of this file under
-            ─── Graveyard ─── for future reuse.
-            To revive: uncomment the line below. */}
-        {/* <OriginIntro setEraRef={getEraRef("origin")} /> */}
+        {/* Origin story — git init terminal cinematic before EPFL */}
+        <OriginIntro setEraRef={getEraRef("origin")} />
         {GIT_ERAS.map((era, i) => (
           <EraNode
             key={era.id}
@@ -2642,13 +2643,13 @@ function Hero() {
         </motion.p>
 
         <motion.p {...fadeUp(0.2)} className="text-base text-fg/85 leading-relaxed mb-6 max-w-md">
-          For <span className="text-fg font-medium">Professor Oier Mees</span>, I&apos;d like to do my Spring 2026 semester project with you. The past months I&apos;ve been 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT, and I&apos;m ready to start day one.
+          Dear <span className="text-fg font-medium">Professor Oier Mees</span>, I&apos;d like to do my Spring 2026 semester project with you. The past months I&apos;ve been 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT, and I&apos;m ready to start day one.
         </motion.p>
 
         <motion.div {...fadeUp(0.35)}>
           <button
             type="button"
-            onClick={() => setShowWhy((v) => !v)}
+            onClick={() => { const next = !showWhy; setShowWhy(next); if (next) posthog.capture('why_button_opened'); }}
             aria-expanded={showWhy}
             className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/30 bg-accent-cyan/[0.08] backdrop-blur-md px-5 py-2.5 text-xs font-medium text-accent-cyan hover:border-accent-cyan/55 hover:bg-accent-cyan/[0.14] transition-all duration-200"
           >
@@ -2716,7 +2717,7 @@ function HeroVariantA() {
             MSc Mechanical Engineering · ETH Zurich M4 · Robotics &amp; AI
           </motion.p>
           <motion.p {...fadeUp(0.2)} className="text-base text-fg/85 leading-relaxed mb-8 max-w-md">
-            For <span className="text-fg font-medium">Professor Oier Mees</span> — I&apos;d like to do my Spring 2026 semester project with you. I&apos;ve spent the past months 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT, and I&apos;m ready to start day one.
+            Dear <span className="text-fg font-medium">Professor Oier Mees</span>, I&apos;d like to do my Spring 2026 semester project with you. I&apos;ve spent the past months 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT, and I&apos;m ready to start day one.
           </motion.p>
           <motion.div {...fadeUp(0.3)} className="flex flex-wrap gap-3">
             <a
@@ -2841,7 +2842,7 @@ function HeroVariantC() {
           MSc Mechanical Engineering · ETH Zurich M4 · Robotics &amp; AI
         </motion.p>
         <motion.p {...fadeUp(0.2)} className="text-base text-fg/85 leading-relaxed mb-7 max-w-2xl mx-auto">
-          For <span className="text-fg font-medium">Professor Oier Mees</span> — I&apos;d like to do my Spring 2026 semester project with you. The past months I&apos;ve been 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT.
+          Dear <span className="text-fg font-medium">Professor Oier Mees</span>, I&apos;d like to do my Spring 2026 semester project with you. The past months I&apos;ve been 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT.
         </motion.p>
         <motion.div {...fadeUp(0.3)} className="flex flex-wrap justify-center gap-3">
           <a
@@ -2922,7 +2923,7 @@ export default function MeesPage() {
             Your work, and where we&apos;re heading
           </h2>
           <p className="text-muted max-w-2xl text-base leading-relaxed">
-            The papers from <span className="text-fg font-medium">Professor Mees&apos;s</span> lab I&apos;ve learned the most from — and the direction we&apos;re already taking at the ETH Robotics Club. He&apos;s the best in Zürich for robot learning; I&apos;m ready to contribute on any of these, and the mimic-video direction is the one we&apos;re already running.
+            The papers from your lab I&apos;ve learned the most from — and the direction we&apos;re already taking at the ETH Robotics Club. You&apos;re the best in Zürich for robot learning; I&apos;m ready to contribute on any of these, and the mimic-video direction is the one we&apos;re already running.
           </p>
         </motion.div>
 
@@ -2934,6 +2935,7 @@ export default function MeesPage() {
           target="_blank"
           rel="noopener noreferrer"
           className="group block mt-10"
+          onClick={() => posthog.capture('paper_clicked', { paper: 'mimic-video' })}
         >
           <div className="relative rounded-3xl border border-[#ff7043]/40 bg-gradient-to-br from-[#e50914]/[0.08] via-[#ff3d2e]/[0.05] to-[#ff7043]/[0.10] p-8 sm:p-10 transition-all duration-200 hover:border-[#ff7043]/60 hover:from-[#e50914]/[0.12] hover:via-[#ff3d2e]/[0.08] hover:to-[#ff7043]/[0.14] shadow-[0_8px_40px_rgba(229,9,20,0.10)]">
             <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
@@ -2991,6 +2993,7 @@ export default function MeesPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group block h-full"
+                onClick={() => posthog.capture('paper_clicked', { paper: p.shortLabel })}
               >
                 <GlassCard className={`p-7 h-full flex flex-col gap-4 transition-colors hover:${c.border}`}>
                   <div className="flex items-center gap-3 flex-wrap">
@@ -3025,11 +3028,11 @@ export default function MeesPage() {
             I can start immediately.
           </h2>
           <p className="text-muted max-w-xl mx-auto text-base leading-relaxed">
-            After San Francisco I really understood the importance of finding something I believe in. Robot learning is what I want to become great at, and <span className="text-fg font-medium">Professor Oier Mees</span> is the person who can really help me get there. I&apos;m open to following you into whichever research track makes most sense — my greatest skill is adapting to new situations, and my goal is becoming a great robot learning engineer.
+            I&apos;ve been following your class this semester — I love the guest speakers, and every lecture has made me more convinced this is the direction I want to go deep in. I&apos;d love to work on robot learning and adapt to whichever research track makes most sense for your lab. I also have a few ideas of my own I&apos;d be excited to explore: egocentric data understanding, mapping videos to text, or video generation models for robotics.
           </p>
 
           <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-muted/70 pt-4">
-            Did this land?
+            Do you think I can be a great fit?
           </p>
 
           <div className="grid gap-4 sm:grid-cols-3 max-w-3xl mx-auto">
@@ -3039,6 +3042,7 @@ export default function MeesPage() {
             <a
               href="mailto:tgazzini@ethz.ch?subject=Robot%20Learning%20Spring%202026%20%E2%80%94%20let%27s%20chat%20after%20class&body=Hi%20Tommaso%2C%0D%0A%0D%0ALet%27s%20catch%20up%20after%20class%20%E2%80%94%20I%27ll%20find%20you%20in%20the%20lecture%20room.%0D%0A%0D%0A%E2%80%94%20Professor%20Oier%20Mees"
               className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-accent-cyan/30 bg-accent-cyan/[0.06] px-5 py-7 transition-all duration-200 hover:border-accent-cyan/55 hover:bg-accent-cyan/[0.12] hover:scale-[1.02] active:scale-[0.99]"
+              onClick={() => posthog.capture('cta_clicked', { action: 'chat_after_class' })}
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-cyan/15 border border-accent-cyan/30 group-hover:bg-accent-cyan/25 transition-colors">
                 <MessageCircle className="h-6 w-6 text-accent-cyan" />
@@ -3061,6 +3065,7 @@ export default function MeesPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group relative flex flex-col items-center justify-center gap-3 rounded-2xl border border-[#ff7043]/40 bg-gradient-to-br from-[#e50914]/[0.18] via-[#ff3d2e]/[0.14] to-[#ff7043]/[0.14] px-5 py-7 transition-all duration-200 hover:border-[#ff7043]/60 hover:from-[#e50914]/[0.28] hover:via-[#ff3d2e]/[0.22] hover:to-[#ff7043]/[0.22] hover:scale-[1.02] active:scale-[0.99] shadow-[0_4px_24px_rgba(229,9,20,0.15)]"
+              onClick={() => posthog.capture('cta_clicked', { action: 'calendly' })}
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#ff7043]/20 border border-[#ff7043]/40 group-hover:bg-[#ff7043]/30 transition-colors">
                 <Calendar className="h-6 w-6 text-[#ff7043]" />
@@ -3081,6 +3086,7 @@ export default function MeesPage() {
             <a
               href="mailto:tgazzini@ethz.ch?subject=Robot%20Learning%20Spring%202026%20%E2%80%94%20quick%20feedback&body=Hi%20Tommaso%2C%0D%0A%0D%0A%5B%20what%20I%27d%20like%20to%20know%20more%20about%2C%20or%20honest%20feedback%20%5D%3A%0D%0A%0D%0A%E2%80%94%20Professor%20Oier%20Mees"
               className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/[0.04] px-5 py-7 transition-all duration-200 hover:border-white/30 hover:bg-white/[0.08]"
+              onClick={() => posthog.capture('cta_clicked', { action: 'feedback_email' })}
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/[0.06] border border-white/15 group-hover:bg-white/[0.12] transition-colors">
                 <HelpCircle className="h-6 w-6 text-fg/70" />
@@ -3253,7 +3259,3 @@ function WhoAmISectionGraveyard() {
   );
 }
 
-// `OriginIntro` is still defined further up this file (the git-init terminal
-// cinematic + animated Europe map with paper-plane motion path). It's just no
-// longer rendered. Revive by uncommenting the `<OriginIntro setEraRef={...} />`
-// line inside `GitTimeline` (search "Origin story — git init terminal").
