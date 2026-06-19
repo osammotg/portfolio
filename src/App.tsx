@@ -17,6 +17,7 @@ import Certifications from './pages/Certifications';
 import Achievements from './pages/Achievements';
 import Publications from './pages/Publications';
 import MeesPage from './research/mees/MeesPage';
+import ResearchPage from './research/general/ResearchPage';
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
       <Route path="/" element={<NetflixTitle />} />
       <Route path="/browse" element={<Browse />} />
       <Route path="/research/mees" element={<Layout><MeesPage /></Layout>} />
+      <Route path="/research" element={<Layout><ResearchPage /></Layout>} />
       <Route path="/profile/:profileName" element={<Layout><ProfilePage /></Layout>} />
       <Route path="/work-permit" element={<Layout><WorkPermit /></Layout>} />
       <Route path="/experience" element={<Layout><Experience /></Layout>} />

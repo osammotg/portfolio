@@ -68,6 +68,16 @@ function useTypewriter(text: string, speed: number, active: boolean) {
 const WHY_TEXT =
 `Your Robot Learning class this semester made it concrete — this is what I want to specialize in. I've been building toward the mimic-video direction at the Robotics Club all semester, and I want to keep going, learning from you directly.`;
 
+// General-purpose variant of this page (route: /research). Same journey,
+// pipeline, deployments and academic record as the Mees application page, but
+// with every professor/class-specific line removed so it can be shared with
+// any research lab. `variant` defaults to "mees" so the original page is
+// untouched.
+type PageVariant = "mees" | "general";
+
+const WHY_TEXT_GENERAL =
+`The past year at the ETH Robotics Club turned a vague pull toward robotics into a clear focus: I want to do research on robot learning. I've gone from teleop hardware to deployed policies, and now I want to push the science further — ideally somewhere I can go deep with people who do this full time.`;
+
 // ─── Animation helpers ────────────────────────────────────────────────────────
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -2574,9 +2584,10 @@ function GitTimeline() {
 // "See what I built" button below is the escape hatch so the professor is
 // never stuck. Spline watermark is left visible (free tier TOS).
 
-function Hero() {
+function Hero({ variant = "mees" }: { variant?: PageVariant }) {
   const [showWhy, setShowWhy] = useState(false);
-  const whyTyped = useTypewriter(WHY_TEXT, 20, showWhy);
+  const isGeneral = variant === "general";
+  const whyTyped = useTypewriter(isGeneral ? WHY_TEXT_GENERAL : WHY_TEXT, 20, showWhy);
 
   // Smooth-scroll to the journey section. Used by the "See what I built"
   // button so the professor can skip past the hero in one click instead
@@ -2624,7 +2635,9 @@ function Hero() {
       <div className="absolute inset-x-0 bottom-0 z-10 px-6 sm:px-10 lg:px-16 pb-12 pt-32 max-w-2xl">
         <motion.div {...fadeUp(0.05)} className="mb-4">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#e50914]/30 bg-[#e50914]/[0.10] backdrop-blur-md px-4 py-1.5 text-[11px] uppercase tracking-[0.4em] text-[#e50914]">
-            ETH Spring 2026 · Semester Project · CVG — ETH × Microsoft
+            {isGeneral
+              ? "ETH Zurich · MSc Mechanical Engineering · Robotics & AI"
+              : "ETH Spring 2026 · Semester Project · CVG — ETH × Microsoft"}
           </span>
         </motion.div>
 
@@ -2643,7 +2656,15 @@ function Hero() {
         </motion.p>
 
         <motion.p {...fadeUp(0.2)} className="text-base text-fg/85 leading-relaxed mb-6 max-w-md">
-          Dear <span className="text-fg font-medium">Professor Oier Mees</span>, I&apos;d like to do my Spring 2026 semester project with you. The past months I&apos;ve been 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT, and I&apos;m ready to start day one.
+          {isGeneral ? (
+            <>
+              I&apos;m a robotics master&apos;s student at ETH Zurich. For the past year I&apos;ve been living 24/7 at the ETH Robotics Club, building and deploying robot-learning systems on real hardware — from teleop and data pipelines to trained, deployed policies. This is what I built, and the research I want to go deep on next.
+            </>
+          ) : (
+            <>
+              Dear <span className="text-fg font-medium">Professor Oier Mees</span>, I&apos;d like to do my Spring 2026 semester project with you. The past months I&apos;ve been 24/7 at the ETH Robotics Club building the bimanual data pipeline and training ACT, and I&apos;m ready to start day one.
+            </>
+          )}
         </motion.p>
 
         <motion.div {...fadeUp(0.35)}>
@@ -2654,7 +2675,7 @@ function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-accent-cyan/30 bg-accent-cyan/[0.08] backdrop-blur-md px-5 py-2.5 text-xs font-medium text-accent-cyan hover:border-accent-cyan/55 hover:bg-accent-cyan/[0.14] transition-all duration-200"
           >
             {showWhy ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-            Why do I want to work with you?
+            {isGeneral ? "Why I want to do research" : "Why do I want to work with you?"}
           </button>
           <AnimatePresence>
             {showWhy && (
@@ -2668,7 +2689,7 @@ function Hero() {
               >
                 <GlassCard className="mt-3 p-5">
                   <p className="text-[9px] uppercase tracking-[0.45em] text-accent-cyan mb-3">
-                    Why do I want to work with you?
+                    {isGeneral ? "Why I want to do research" : "Why do I want to work with you?"}
                   </p>
                   <div className="font-mono text-xs text-fg/90 leading-relaxed whitespace-pre-wrap">
                     {whyTyped}
@@ -2877,7 +2898,8 @@ function HeroVariantC() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function MeesPage() {
+export default function MeesPage({ variant = "mees" }: { variant?: PageVariant } = {}) {
+  const isGeneral = variant === "general";
   return (
     <div className="relative min-h-screen bg-[#141414] overflow-x-hidden font-sans text-fg">
 
@@ -2891,7 +2913,7 @@ export default function MeesPage() {
             Robot stays interactive (cursor-follow). The "See what I built"
             button below smooth-scrolls to #journey so professors can skip
             past the iframe instead of fighting its wheel-capture. */}
-      <Hero />
+      <Hero variant={variant} />
 
       {/* ── JOURNEY — git timeline ──
           Sits right after the hero. Click any era or branch to expand. */}
@@ -2920,10 +2942,12 @@ export default function MeesPage() {
         <motion.div {...fadeUp(0)} className="mb-4">
           <SectionEyebrow>Research interests</SectionEyebrow>
           <h2 className="font-playfair text-4xl font-bold tracking-tight sm:text-5xl mb-5">
-            Your work, and where we&apos;re heading
+            {isGeneral ? "Where I want to go deep" : "Your work, and where we’re heading"}
           </h2>
           <p className="text-muted max-w-2xl text-base leading-relaxed">
-            The papers from your lab I&apos;ve learned the most from — and the direction we&apos;re already taking at the ETH Robotics Club. You&apos;re the best in Zürich for robot learning; I&apos;m ready to contribute on any of these, and the mimic-video direction is the one we&apos;re already running.
+            {isGeneral
+              ? "The directions I'm most excited to do research in, and the papers that shaped how I think about them. At the ETH Robotics Club we're already pushing on video-action models; in a research setting I'd love to take that further and adapt to whichever track fits the lab."
+              : "The papers from your lab I’ve learned the most from — and the direction we’re already taking at the ETH Robotics Club. You’re the best in Zürich for robot learning; I’m ready to contribute on any of these, and the mimic-video direction is the one we’re already running."}
           </p>
         </motion.div>
 
@@ -2964,7 +2988,9 @@ export default function MeesPage() {
                     What we&apos;re already doing
                   </p>
                   <p className="text-sm text-fg/85 leading-relaxed">
-                    {MIMIC_VIDEO_PAPER.alreadyDoing}
+                    {isGeneral
+                      ? "At the ETH Robotics Club we started fine-tuning Cosmos on our own YAMS bimanual data. The past weeks I've been reading the paper end-to-end, walking the code with the team, and lining up the IDM training loop on top of our pipeline. It's the direction I most want to take further in a research project."
+                      : MIMIC_VIDEO_PAPER.alreadyDoing}
                   </p>
                 </div>
               </div>
@@ -3023,16 +3049,18 @@ export default function MeesPage() {
       <section className="relative mx-auto max-w-3xl px-6 py-32 sm:px-10 text-center">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_80%,rgba(229,9,20,0.06),transparent)]" />
         <motion.div {...fadeUp()} className="space-y-8">
-          <SectionEyebrow>Ready to start</SectionEyebrow>
+          <SectionEyebrow>{isGeneral ? "Let’s talk" : "Ready to start"}</SectionEyebrow>
           <h2 className="font-playfair text-5xl font-bold tracking-tight sm:text-6xl leading-tight">
-            I can start immediately.
+            {isGeneral ? "I’d love to do research with you." : "I can start immediately."}
           </h2>
           <p className="text-muted max-w-xl mx-auto text-base leading-relaxed">
-            I&apos;ve been following your class this semester — I love the guest speakers, and every lecture has made me more convinced this is the direction I want to go deep in. I&apos;d love to work on robot learning and adapt to whichever research track makes most sense for your lab. I also have a few ideas of my own I&apos;d be excited to explore: egocentric data understanding, mapping videos to text, or video generation models for robotics.
+            {isGeneral
+              ? "I'm looking for a research project — semester project or thesis — where I can go deep on robot learning. I'd adapt to whichever track fits the lab, and I have a few directions of my own I'd be excited to explore: egocentric data understanding, mapping video to text, and video-generation models for robotics."
+              : "I’ve been following your class this semester — I love the guest speakers, and every lecture has made me more convinced this is the direction I want to go deep in. I’d love to work on robot learning and adapt to whichever research track makes most sense for your lab. I also have a few ideas of my own I’d be excited to explore: egocentric data understanding, mapping videos to text, or video generation models for robotics."}
           </p>
 
           <p className="font-mono text-[11px] uppercase tracking-[0.4em] text-muted/70 pt-4">
-            Do you think I can be a great fit?
+            {isGeneral ? "Two ways to reach me" : "Do you think I can be a great fit?"}
           </p>
 
           <div className="grid gap-4 sm:grid-cols-3 max-w-3xl mx-auto">
@@ -3040,20 +3068,28 @@ export default function MeesPage() {
                 semester, so "after class" is a real, casual touchpoint
                 Mees can take in the next week. Cyan = friendly. */}
             <a
-              href="mailto:tgazzini@ethz.ch?subject=Robot%20Learning%20Spring%202026%20%E2%80%94%20let%27s%20chat%20after%20class&body=Hi%20Tommaso%2C%0D%0A%0D%0ALet%27s%20catch%20up%20after%20class%20%E2%80%94%20I%27ll%20find%20you%20in%20the%20lecture%20room.%0D%0A%0D%0A%E2%80%94%20Professor%20Oier%20Mees"
+              href={isGeneral
+                ? "mailto:tgazzini@ethz.ch?subject=Research%20project%20%E2%80%94%20let%27s%20talk&body=Hi%20Tommaso%2C%0D%0A%0D%0A"
+                : "mailto:tgazzini@ethz.ch?subject=Robot%20Learning%20Spring%202026%20%E2%80%94%20let%27s%20chat%20after%20class&body=Hi%20Tommaso%2C%0D%0A%0D%0ALet%27s%20catch%20up%20after%20class%20%E2%80%94%20I%27ll%20find%20you%20in%20the%20lecture%20room.%0D%0A%0D%0A%E2%80%94%20Professor%20Oier%20Mees"}
               className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-accent-cyan/30 bg-accent-cyan/[0.06] px-5 py-7 transition-all duration-200 hover:border-accent-cyan/55 hover:bg-accent-cyan/[0.12] hover:scale-[1.02] active:scale-[0.99]"
-              onClick={() => posthog.capture('cta_clicked', { action: 'chat_after_class' })}
+              onClick={() => posthog.capture('cta_clicked', { action: isGeneral ? 'email_intro' : 'chat_after_class' })}
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-cyan/15 border border-accent-cyan/30 group-hover:bg-accent-cyan/25 transition-colors">
                 <MessageCircle className="h-6 w-6 text-accent-cyan" />
               </div>
               <div className="text-center">
                 <p className="font-playfair text-xl font-semibold text-fg leading-tight">
-                  Yes, let&apos;s talk
-                  <br />after class
+                  {isGeneral ? (
+                    <>Email me</>
+                  ) : (
+                    <>
+                      Yes, let&apos;s talk
+                      <br />after class
+                    </>
+                  )}
                 </p>
                 <p className="text-[10px] text-muted/80 mt-2 font-mono uppercase tracking-[0.2em]">
-                  Casual chat
+                  {isGeneral ? "Quick intro" : "Casual chat"}
                 </p>
               </div>
             </a>
@@ -3084,7 +3120,9 @@ export default function MeesPage() {
             {/* Lowest-effort path — for "I want more context first" or an
                 honest no thanks. Neutral white styling, no urgency. */}
             <a
-              href="mailto:tgazzini@ethz.ch?subject=Robot%20Learning%20Spring%202026%20%E2%80%94%20quick%20feedback&body=Hi%20Tommaso%2C%0D%0A%0D%0A%5B%20what%20I%27d%20like%20to%20know%20more%20about%2C%20or%20honest%20feedback%20%5D%3A%0D%0A%0D%0A%E2%80%94%20Professor%20Oier%20Mees"
+              href={isGeneral
+                ? "mailto:tgazzini@ethz.ch?subject=Research%20project%20%E2%80%94%20a%20question&body=Hi%20Tommaso%2C%0D%0A%0D%0A%5B%20what%20I%27d%20like%20to%20know%20more%20about%20%5D%3A%0D%0A%0D%0A"
+                : "mailto:tgazzini@ethz.ch?subject=Robot%20Learning%20Spring%202026%20%E2%80%94%20quick%20feedback&body=Hi%20Tommaso%2C%0D%0A%0D%0A%5B%20what%20I%27d%20like%20to%20know%20more%20about%2C%20or%20honest%20feedback%20%5D%3A%0D%0A%0D%0A%E2%80%94%20Professor%20Oier%20Mees"}
               className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/[0.04] px-5 py-7 transition-all duration-200 hover:border-white/30 hover:bg-white/[0.08]"
               onClick={() => posthog.capture('cta_clicked', { action: 'feedback_email' })}
             >
@@ -3142,7 +3180,7 @@ export default function MeesPage() {
 
       <footer className="border-t border-white/[0.05] px-6 py-8 text-center">
         <p className="text-xs text-muted/40">
-          Tommaso Gazzini · ETH Zurich MSc Mechanical Engineering · Spring 2026 ·{" "}
+          Tommaso Gazzini · ETH Zurich MSc Mechanical Engineering · {isGeneral ? "Robotics & AI" : "Spring 2026"} ·{" "}
           <a href="/browse" className="hover:text-muted/70 transition-colors">
             Portfolio
           </a>
