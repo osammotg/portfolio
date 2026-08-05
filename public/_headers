@@ -1,0 +1,14 @@
+# Cloudflare Workers static-assets headers.
+# Replicates the "headers" block of vercel.json so the security headers the
+# site serves today survive the move off Vercel. CRA copies public/ into
+# build/, and Cloudflare reads _headers from the root of the assets dir.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Force a download rather than inline preview, matching vercel.json.
+/Mahbod_Tajdini_CV.pdf
+  Content-Disposition: attachment; filename="Mahbod_Tajdini_CV.pdf"

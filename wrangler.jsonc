@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gazzini-portfolio",
+  "compatibility_date": "2026-08-05",
+
+  // Assets-only Worker: no "main" entrypoint, because Create React App emits a
+  // fully static bundle. Cloudflare serves build/ from its edge cache.
+  "assets": {
+    "directory": "./build",
+
+    // react-router-dom does the routing client-side, so any path that is not a
+    // real file must return index.html. That is what vercel.json's catch-all
+    // rewrite did. Real files (static/, favicon.ico, the CVs, manifest.json)
+    // still win, because asset matching runs before this fallback -- which is
+    // why the explicit exclusion list in the Vercel regex has no equivalent
+    // here and is not needed.
+    "not_found_handling": "single-page-application"
+  }
+}

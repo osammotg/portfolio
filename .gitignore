@@ -3,3 +3,11 @@ cv/new.upa
 cv/new.upb
 .gstack/
 .vercel
+
+# Installed dependencies. These used to be committed, but the committed copy
+# had drifted out of sync with package.json (posthog-js was missing), which
+# broke a clean build. CI installs from the lockfile instead.
+node_modules/
+
+# Cloudflare Wrangler local state
+.wrangler/
