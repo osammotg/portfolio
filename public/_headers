@@ -9,6 +9,14 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
 
+# The hero robot is a same-origin iframe (/spline/robot.html, self-hosted so
+# wheel scroll passes through). DENY would block it, so this path may be
+# framed by the site itself, and only by the site itself.
+/spline/*
+  ! X-Frame-Options
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'
+
 # Force a download rather than inline preview, matching vercel.json.
 /Mahbod_Tajdini_CV.pdf
   Content-Disposition: attachment; filename="Mahbod_Tajdini_CV.pdf"
