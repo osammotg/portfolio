@@ -4,10 +4,14 @@ import { FaLinkedin, FaGithub } from "react-icons/fa";
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import SplineViewer from "../../components/SplineViewer";
 import WaterPoloCard from "./WaterPoloCard";
+import ProjectsSection from "../projects/ProjectsSection";
+import projectsData from "../projects/projects.json";
 import posthog from 'posthog-js';
 
-const SPLINE_SCENE =
-  "https://my.spline.design/nexbotrobotcharacterconceptforpersonaluse-ABbfTCXAkIulvE46geZHQMFx/";
+// Self-hosted copy of the Spline "NEXBOT" scene (public/spline/). Served
+// same-origin so robot.html can let wheel scroll pass through to this page;
+// the my.spline.design embed swallowed scroll over the robot.
+const SPLINE_SCENE = "/spline/robot.html";
 
 // ─── Robot cursor ─────────────────────────────────────────────────────────────
 
@@ -349,7 +353,7 @@ const accentHex: Record<AccentKey, string> = {
   green:   "#22c55e",
 };
 
-type EraId = "ep01" | "sf" | "ep02" | "ep04";
+type EraId = "ep01" | "sf" | "ep02" | "ep04" | "ep05";
 type BranchAnchor = EraId | "above-ep01" | "origin";
 
 type LogoSpec = { src: string; alt: string };
@@ -492,7 +496,7 @@ const GIT_ERAS: EraData[] = [
       "Swiss Special Forces · Grenadier corps · Isone, Ticino",
       "Why: chose the hardest path on offer",
       "Test the limits — physical and mental",
-      "Kept my start-up Stryker running on the weekends.",
+      "Kept my start-up Striker running on the weekends.",
     ],
     bgImage: "/military-bg.jpeg",
   },
@@ -591,19 +595,19 @@ const GIT_ERAS: EraData[] = [
   {
     id: "ep04",
     ep: "04",
-    year: "2026 – Present",
+    year: "2026",
     startYear: 2026,
     eyebrow: "ETH Robotics Club · Robot Learning · merge commit · all roads",
     accent: "fuchsia",
-    title: "Robot Learning Team — 24/7, All In",
+    title: "Robot Learning Team — All In",
     description:
       "I knew I wanted to become a great robotics engineer, but wasn't sure what in robotics interested me most. Joined the ETH Robotics Club to find out — starting as an honorary member, becoming an active one. Saw real potential in the Robot Learning team and stayed. Since then, working every day with the team on implementations and advanced papers. Every prior thread merges here.",
     summary: [
-      "🚐 Living 24/7 on-site in my van",
+      "🚐 Lived on-site in my van for 8 months",
       "Goal: understand robot learning end-to-end and publish at least 1 paper",
     ],
     items: [
-      "Living at the robotics hangar in my van, on-site at the lab",
+      "Lived at the robotics hangar in my van for 8 months, on-site at the lab",
       "Goal this semester: become a great robot learning engineer and complete my semester project",
       "YAMS: rebuilt control loop 30 → 120 Hz (106 commits)",
       "Bimanual data pipeline: 863 curated demos across 9 datasets",
@@ -613,6 +617,27 @@ const GIT_ERAS: EraData[] = [
     stat: "10×",
     isConvergence: true,
     logo: { src: "/logos/ethrc.jpeg", alt: "ETH Robotics Club" },
+  },
+  {
+    id: "ep05",
+    ep: "05",
+    year: "Autumn 2026 – Present",
+    startYear: 2026.67,
+    eyebrow: "Bühler · Uzwil · now",
+    accent: "amber",
+    title: "Building a robot-learning lab at Bühler",
+    description:
+      "After my semester project with Bühler, they gave me a budget and the trust to build a robot-learning lab from scratch. Bühler has no autonomous robots yet. The plan: buy robot hardware, collect human demonstrations on real Bühler tasks, and let performance scale with demonstrations, not engineering hours. Just as important is bringing the workers along, which started with a robotics masterclass I gave to the management board.",
+    summary: [
+      "Building Bühler's first robot-learning lab, from scratch",
+      "Bühler gave me a budget to build it around demonstration-driven robot learning",
+    ],
+    items: [
+      "Started with my ETH semester project: a VLA kitting cell on a real Bühler production task",
+      "Then a budget to build the lab around demonstration-driven robot learning",
+      "Gave a robotics masterclass to the management board",
+    ],
+    logo: { src: "/projects/buehler-lab/buhler-logo.png", alt: "Bühler" },
   },
 ];
 
@@ -717,8 +742,8 @@ const ETH_GRADES: GradeRow[] = [
   { course: "Robot Dynamics", grade: "4.5" },
   { course: "Introduction to Machine Learning", grade: "4.5" },
   { course: "Russian for Insiders (A2-C1)", grade: "5.25" },
-  { course: "Robot Learning 263-5911-00L · Mees · Spring 2026", grade: "in progress", inProgress: true },
-  { course: "Soccer Analytics · Spring 2026", grade: "in progress", inProgress: true },
+  { course: "Robot Learning 263-5911-00L · Mees · Spring 2026", grade: "5.0" },
+  { course: "Soccer Analytics · Spring 2026", grade: "5.0" },
 ];
 
 // ─── Proof section ────────────────────────────────────────────────────────────
@@ -1056,7 +1081,12 @@ function RoboticsPipelineSection() {
 // Layout uses object-contain + max-h so vertical (portrait) and horizontal
 // (landscape) clips both render at their natural aspect — no deformation.
 
-function AutonomousDeploymentsSection() {
+// Write-up for this section lives in projects.json (card "act-policies",
+// hidden from the card grid so the policies aren't shown twice).
+const ACT_CARD = (projectsData as { id: string; paragraph: string; links?: { label: string; url: string }[] }[])
+  .find((p) => p.id === "act-policies");
+
+function AutonomousDeploymentsSection({ showVideos = true }: { showVideos?: boolean }) {
   return (
     <section className="relative mx-auto max-w-6xl px-6 py-24 sm:px-10">
       <motion.div {...fadeUp(0)} className="mb-10">
@@ -1068,8 +1098,21 @@ function AutonomousDeploymentsSection() {
           <li><span className="text-muted/60 mr-2">1.</span>Towel folding</li>
           <li><span className="text-muted/60 mr-2">2.</span>GPU ventilator into a carton box and closing it</li>
         </ol>
+        {ACT_CARD && (
+          <>
+            <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted">{ACT_CARD.paragraph}</p>
+            {ACT_CARD.links?.map((l) => (
+              <a key={l.url} href={l.url} target="_blank" rel="noreferrer"
+                className="mt-4 inline-block font-mono text-[11px] uppercase tracking-[0.3em] text-[#ff7043] hover:text-fg transition-colors">
+                {l.label} →
+              </a>
+            ))}
+          </>
+        )}
       </motion.div>
 
+      {/* General page: these two videos live in the ETHRC robot-learning card instead. */}
+      {showVideos && (
       <div className="grid gap-6 md:grid-cols-2">
         <motion.figure
           {...fadeUp(0.1)}
@@ -1109,6 +1152,7 @@ function AutonomousDeploymentsSection() {
           </figcaption>
         </motion.figure>
       </div>
+      )}
     </section>
   );
 }
@@ -1769,8 +1813,8 @@ function OriginIntro({ setEraRef }: { setEraRef?: (node: HTMLDivElement | null) 
           </div>
         </motion.div>
 
-        {/* Languages — 2-column grid, fills as commits land */}
-        <div className="mt-5 grid grid-cols-2 gap-2 max-w-sm">
+        {/* Languages — flags only, fill in as commits land. Name on hover. */}
+        <div className="mt-4 flex flex-wrap items-center gap-2.5">
           <AnimatePresence initial={false}>
             {allLangs.map((l) => (
               <motion.div
@@ -1780,13 +1824,12 @@ function OriginIntro({ setEraRef }: { setEraRef?: (node: HTMLDivElement | null) 
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, ease }}
-                className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3"
+                title={`${l.lang} · ${l.level}`}
+                aria-label={`${l.lang}, ${l.level}`}
+                role="img"
+                className="text-2xl leading-none"
               >
-                <span className="text-2xl leading-none">{l.flag}</span>
-                <div>
-                  <p className="text-sm font-medium text-fg/90 leading-none mb-1">{l.lang}</p>
-                  <p className="text-[10px] font-mono uppercase tracking-wider text-fg/40">{l.level}</p>
-                </div>
+                {l.flag}
               </motion.div>
             ))}
           </AnimatePresence>
@@ -1885,7 +1928,7 @@ function EraNode({
           </motion.div>
           {/* 24/7 robotics pill — anchored to the merge node */}
           <motion.div
-            className="absolute -left-4 z-20"
+            className="absolute -left-4 z-20 hidden sm:block"
             style={{ top: 76 }}
             initial={{ opacity: 0, y: -6 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -6 }}
@@ -1893,7 +1936,7 @@ function EraNode({
           >
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#e50914]/35 bg-[#e50914]/[0.10] px-2.5 py-1 text-[9px] font-mono font-bold tracking-[0.15em] text-[#ff7043] whitespace-nowrap">
               <span className="h-1.5 w-1.5 rounded-full bg-[#e50914] animate-pulse" />
-              24/7 · ON-SITE
+              8 MONTHS · ON-SITE
             </span>
           </motion.div>
         </>
@@ -1938,6 +1981,15 @@ function EraNode({
           </h3>
           <LogoImg spec={era.logo} className="h-7 sm:h-8 w-auto opacity-90" />
         </motion.div>
+
+        {/* Phones: the on-site pill sits inline here; the absolute one next to
+            the merge node would cover the title on narrow screens. */}
+        {era.isConvergence && (
+          <span className="sm:hidden mb-4 inline-flex items-center gap-1.5 rounded-full border border-[#e50914]/35 bg-[#e50914]/[0.10] px-2.5 py-1 text-[9px] font-mono font-bold tracking-[0.15em] text-[#ff7043] whitespace-nowrap">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#e50914] animate-pulse" />
+            8 MONTHS · ON-SITE
+          </span>
+        )}
 
         {/* Punch bullets — always visible, the skim path */}
         {era.summary && era.summary.length > 0 && (
@@ -2199,7 +2251,13 @@ function BranchPath({
   );
 }
 
-function GitTimeline() {
+function GitTimeline({ hideBranches = [] }: { hideBranches?: string[] } = {}) {
+  // Per-page trimming: drop branch cards (e.g. "ai-side" on /research/robotics).
+  const eras = useMemo(
+    () => GIT_ERAS.map((e) => ({ ...e, branches: e.branches?.filter((b) => !hideBranches.includes(b.id)) })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [hideBranches.join(",")],
+  );
   const containerRef = useRef<HTMLDivElement>(null);
   const tracksRef = useRef<HTMLDivElement>(null);
   const eraNodes = useRef<Record<string, HTMLDivElement | null>>({});
@@ -2248,7 +2306,7 @@ function GitTimeline() {
     const MERGE_FUNNEL = 120;
 
     const eraY: Record<string, number> = { "above-ep01": 0 };
-    for (const era of GIT_ERAS) {
+    for (const era of eras) {
       const node = eraNodes.current[era.id];
       if (!node) continue;
       const r = node.getBoundingClientRect();
@@ -2280,12 +2338,12 @@ function GitTimeline() {
           : Math.max(0, Math.min(1, (year - ORIGIN_YEAR_START) / (ORIGIN_YEAR_END - ORIGIN_YEAR_START)));
         return originTop + ORIGIN_TOP_BUFFER + fraction * usable;
       }
-      const eraIdx = GIT_ERAS.findIndex((e) => e.id === anchor);
+      const eraIdx = eras.findIndex((e) => e.id === anchor);
       if (eraIdx === -1) return eraY[anchor] ?? 0;
-      const era = GIT_ERAS[eraIdx];
+      const era = eras[eraIdx];
       const eraDotY = eraY[era.id] ?? 0;
       if (year === undefined) return eraDotY;
-      const nextEra = GIT_ERAS[eraIdx + 1];
+      const nextEra = eras[eraIdx + 1];
       const nextDotY = nextEra ? eraY[nextEra.id] ?? eraDotY + 200 : eraDotY + 200;
       // Map years against the visible card body, not the gap above the next dot.
       // Each era ends with mb-20 (~80px); without subtracting it, ratio=1.0 lands
@@ -2299,7 +2357,7 @@ function GitTimeline() {
       return eraDotY + ratio * (cardEnd - eraDotY);
     };
 
-    const allBranches = GIT_ERAS.flatMap((e) => e.branches ?? []);
+    const allBranches = eras.flatMap((e) => e.branches ?? []);
     const newPaths: ComputedPath[] = [];
     const newForkMarkers: ForkMarker[] = [];
 
@@ -2563,11 +2621,11 @@ function GitTimeline() {
         ))}
         {/* Origin story — git init terminal cinematic before EPFL */}
         <OriginIntro setEraRef={getEraRef("origin")} />
-        {GIT_ERAS.map((era, i) => (
+        {eras.map((era, i) => (
           <EraNode
             key={era.id}
             era={era}
-            isLast={i === GIT_ERAS.length - 1}
+            isLast={i === eras.length - 1}
             setEraRef={getEraRef(era.id)}
             getBranchCardRef={getBranchCardRef}
           />
@@ -2580,9 +2638,8 @@ function GitTimeline() {
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 // Full-bleed Spline robot with a text card pinned to the lower-left. Robot
 // stays interactive (cursor-follow works over the open right-and-centre of
-// the frame). Scroll over the iframe is captured by Spline — the explicit
-// "See what I built" button below is the escape hatch so the professor is
-// never stuck. Spline watermark is left visible (free tier TOS).
+// the frame). Scrolling over the robot scrolls the page: the self-hosted
+// scene forwards wheel events to the parent (see public/spline/robot.html). Spline watermark is left visible (free tier TOS).
 
 function Hero({ variant = "mees" }: { variant?: PageVariant }) {
   const [showWhy, setShowWhy] = useState(false);
@@ -2616,7 +2673,7 @@ function Hero({ variant = "mees" }: { variant?: PageVariant }) {
           professor never gets stuck on the hero. */}
       <motion.div
         {...fadeUp(0.4)}
-        className="absolute bottom-12 right-6 sm:right-10 lg:right-16 z-10"
+        className="absolute bottom-12 right-6 sm:right-10 lg:right-16 z-10 hidden sm:block"
       >
         <button
           type="button"
@@ -2636,7 +2693,7 @@ function Hero({ variant = "mees" }: { variant?: PageVariant }) {
         <motion.div {...fadeUp(0.05)} className="mb-4">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#e50914]/30 bg-[#e50914]/[0.10] backdrop-blur-md px-4 py-1.5 text-[11px] uppercase tracking-[0.4em] text-[#e50914]">
             {isGeneral
-              ? "ETH Zurich · MSc Mechanical Engineering · Robotics & AI"
+              ? "ETH Zurich · Robotics & AI"
               : "ETH Spring 2026 · Semester Project · CVG — ETH × Microsoft"}
           </span>
         </motion.div>
@@ -2658,7 +2715,7 @@ function Hero({ variant = "mees" }: { variant?: PageVariant }) {
         <motion.p {...fadeUp(0.2)} className="text-base text-fg/85 leading-relaxed mb-6 max-w-md">
           {isGeneral ? (
             <>
-              I&apos;m a robotics master&apos;s student at ETH Zurich. For the past year I&apos;ve been living 24/7 at the ETH Robotics Club, building and deploying robot-learning systems on real hardware — from teleop and data pipelines to trained, deployed policies. This is what I built, and the research I want to go deep on next.
+              I&apos;m a robotics master&apos;s student at ETH Zurich, now building a robot-learning lab from scratch at Bühler, where my semester project put a VLA on a real production task. Before that I spent 8 months living at the ETH Robotics Club, deploying robot-learning policies on a bimanual setup and helping build a humanoid. This is what I built, and the research I want to go deep on next.
             </>
           ) : (
             <>
@@ -2915,18 +2972,22 @@ export default function MeesPage({ variant = "mees" }: { variant?: PageVariant }
             past the iframe instead of fighting its wheel-capture. */}
       <Hero variant={variant} />
 
+      {/* ── SELECTED PROJECTS ── general/Stanford page only: one card per
+          robotics project, content in research/projects/projects.json. */}
+      {isGeneral && <ProjectsSection />}
+
       {/* ── JOURNEY — git timeline ──
           Sits right after the hero. Click any era or branch to expand. */}
-      <GitTimeline />
+      <GitTimeline hideBranches={isGeneral ? ["ai-side"] : []} />
 
       {/* ── WHAT WE BUILT — Interactive Pipeline ──
           Jump straight to the subject after the timeline: the Robotics Club
           work, end to end. */}
-      <RoboticsPipelineSection />
+      {!isGeneral && <RoboticsPipelineSection />}
 
       {/* ── AUTONOMOUS DEPLOYMENTS ──
           Outcomes — the policies actually running on YAMS. */}
-      <AutonomousDeploymentsSection />
+      <AutonomousDeploymentsSection showVideos={!isGeneral} />
 
       {/* ── PROOF — what I've shipped + academic record ──
           Moved down: after the reader has seen the Robotics Club work and
@@ -2937,7 +2998,7 @@ export default function MeesPage({ variant = "mees" }: { variant?: PageVariant }
           The pitch. mimic-video is featured first as the direction we're
           already pursuing at the ETH Robotics Club; the three-card grid
           below shows the surrounding work I'd be ready to extend. */}
-      <section className="relative mx-auto max-w-6xl px-6 py-24 sm:px-10">
+      <section id="research" className="relative mx-auto max-w-6xl px-6 py-24 sm:px-10">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_55%_45%_at_50%_50%,rgba(229,9,20,0.04),transparent)]" />
         <motion.div {...fadeUp(0)} className="mb-4">
           <SectionEyebrow>Research interests</SectionEyebrow>
@@ -3046,7 +3107,7 @@ export default function MeesPage({ variant = "mees" }: { variant?: PageVariant }
           without typing from scratch. Both paths are one click. The
           smaller email/LinkedIn/GitHub trio sits below as a fallback for
           anyone who'd rather contact directly. */}
-      <section className="relative mx-auto max-w-3xl px-6 py-32 sm:px-10 text-center">
+      <section id="contact" className="relative mx-auto max-w-3xl px-6 py-32 sm:px-10 text-center">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_80%,rgba(229,9,20,0.06),transparent)]" />
         <motion.div {...fadeUp()} className="space-y-8">
           <SectionEyebrow>{isGeneral ? "Let’s talk" : "Ready to start"}</SectionEyebrow>
@@ -3063,7 +3124,7 @@ export default function MeesPage({ variant = "mees" }: { variant?: PageVariant }
             {isGeneral ? "Two ways to reach me" : "Do you think I can be a great fit?"}
           </p>
 
-          <div className="grid gap-4 sm:grid-cols-3 max-w-3xl mx-auto">
+          <div className={`grid gap-4 mx-auto ${isGeneral ? "sm:grid-cols-2 max-w-xl" : "sm:grid-cols-3 max-w-3xl"}`}>
             {/* Lowest-commitment path. Tommaso is in Mees's class this
                 semester, so "after class" is a real, casual touchpoint
                 Mees can take in the next week. Cyan = friendly. */}
@@ -3118,7 +3179,9 @@ export default function MeesPage({ variant = "mees" }: { variant?: PageVariant }
             </a>
 
             {/* Lowest-effort path — for "I want more context first" or an
-                honest no thanks. Neutral white styling, no urgency. */}
+                honest no thanks. Neutral white styling, no urgency.
+                Mees page only: on the general page it duplicated "Email me". */}
+            {!isGeneral && (
             <a
               href={isGeneral
                 ? "mailto:tgazzini@ethz.ch?subject=Research%20project%20%E2%80%94%20a%20question&body=Hi%20Tommaso%2C%0D%0A%0D%0A%5B%20what%20I%27d%20like%20to%20know%20more%20about%20%5D%3A%0D%0A%0D%0A"
@@ -3139,6 +3202,7 @@ export default function MeesPage({ variant = "mees" }: { variant?: PageVariant }
                 </p>
               </div>
             </a>
+            )}
           </div>
 
           {/* Fallback contact row — for anyone who'd rather skip the

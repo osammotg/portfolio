@@ -1,0 +1,465 @@
+[
+  {
+    "id": "buehler-lab",
+    "featured": true,
+    "title": "Building a robot-learning lab from scratch at Bühler",
+    "when": "Autumn 2026 · Bühler, Uzwil",
+    "role": "Building the lab",
+    "paragraph": "Bühler started around 165 years ago in Uzwil, and today billions of people rely on its machines every day for food and mobility. Yet it has no autonomous robots. After my semester project with them, Bühler trusted me with building a robot-learning lab from scratch. The strategy is simple: buy robot hardware and collect human demonstrations on real Bühler tasks, so performance scales with demonstrations, not engineering hours.",
+    "claims": [
+      "c1",
+      "c2",
+      "c18",
+      "c23",
+      "c24",
+      "c25",
+      "c26",
+      "c27",
+      "c28",
+      "c29"
+    ],
+    "stats": [
+      {
+        "value": "12,300+",
+        "label": "employees"
+      },
+      {
+        "value": "140",
+        "label": "countries"
+      },
+      {
+        "value": "None",
+        "label": "autonomous robots before the lab"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/buehler-lab/montagehalle-uzwil.jpg",
+        "kind": "image",
+        "caption": "Bühler assembly hall in Uzwil, the site of the planned robot-learning cell.",
+        "credit": "Photo: Bühler Group, CC BY-SA 3.0, via Wikimedia Commons",
+        "w": 600,
+        "h": 464
+      }
+    ],
+    "logo": {
+      "src": "/projects/buehler-lab/buhler-logo.png",
+      "alt": "Bühler logo",
+      "credit": "Logo: Bühler AG, CC BY-SA 4.0, via Wikimedia Commons"
+    }
+  },
+  {
+    "id": "kitting",
+    "title": "Kitting cell: VLAs on a real production task",
+    "when": "Autumn 2026 · ETH semester project with Bühler",
+    "role": "Semester project",
+    "paragraph": "For my ETH semester project I wanted to see what industry actually needs from robots, so I went into the Bühler factory and looked for problems robotics could solve. We picked kitting: bins of thin, translucent, poly-bagged packets (31 packets, 8 SKUs) that have to be organized into kit boxes. The goal is to empty these bins overnight, so the workers get them already organized in the morning. I built a bimanual YAM cell where a fine-tuned VLA (MolmoAct2, 183 minutes of demonstrations) grasps one packet out of the heap, then scripted code reads its label and places it in one of 5 bays. Around the VLA we built a loop that checks every grasp and retries every failure, so the cell keeps going until the bin is empty: in one long run it routed 25 of 32 attempts to a bay and sorted 100% of the bin in 49.7 min.",
+    "claims": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c9",
+      "c11",
+      "c16",
+      "c18",
+      "c21",
+      "c22",
+      "c24",
+      "c30",
+      "c31"
+    ],
+    "stats": [
+      {
+        "value": "25/32",
+        "label": "attempts routed to a bay, one long run"
+      },
+      {
+        "value": "891",
+        "label": "attempts machine-scored"
+      },
+      {
+        "value": "183 min",
+        "label": "of demonstrations"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/kitting/live-run-3x.mp4",
+        "kind": "video",
+        "caption": "Two autonomous placements from the long MolmoAct2 run at 3x speed: cell view beside the live cockpit.",
+        "w": 1920,
+        "h": 540
+      },
+      {
+        "src": "/projects/kitting/molmoact2-wrist-grasp.mp4",
+        "kind": "video",
+        "caption": "Wrist-camera view of a MolmoAct2 grasp from the poly-bag packet bin.",
+        "w": 640,
+        "h": 480
+      },
+      {
+        "src": "/projects/kitting/attempt-filmstrip.jpg",
+        "kind": "image",
+        "caption": "One autonomous attempt, top and wrist camera: isolate, grasp, bin-rim hand-over, place.",
+        "w": 1600,
+        "h": 429
+      }
+    ],
+    "figure": "hybrid-loop",
+    "rows": [
+      1,
+      2
+    ]
+  },
+  {
+    "id": "squint-rl",
+    "title": "Sim-to-real RL: multi-cube sorting on SO-101",
+    "when": "Spring 2026 · ETH Robot Learning (Prof. Oier Mees)",
+    "role": "Course team project",
+    "paragraph": "In Oier Mees' Robot Learning course my team extended Squint, a fast visual SAC method, to a multi-cube sorting task on a real SO-101 arm, with an 80x144 wrist camera as the only sensor. Every policy was trained entirely in simulation and deployed directly to hardware. We trained a multi-cube splitting policy with domain randomization to separate tightly packed cubes, then chained split, pick and place policies with automatic cube-colour targeting. To bridge the sim-to-real gap we used FastSAM background masking at 75 Hz, closed-loop wrist-camera xy correction before each grasp, and IK-based smooth Cartesian descent. Ablations showed 100 Hz simulation beat 300 Hz. One lesson stuck: a drop-penalty variant converged to one-shot grasps in sim, yet about 80% of real attempts failed to grasp. We hit all three tasks on the real robot, including the bonus.",
+    "claims": [
+      "c2",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c11",
+      "c16",
+      "c17",
+      "c20",
+      "c21",
+      "c23"
+    ],
+    "stats": [
+      {
+        "value": "75 Hz",
+        "label": "FastSAM background masking"
+      },
+      {
+        "value": "80×144",
+        "label": "pixel wrist camera, the only sensor"
+      },
+      {
+        "value": "100 Hz",
+        "label": "sim frequency that transferred best"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/squint-rl/real-eval3-hero.mp4",
+        "kind": "video",
+        "caption": "Real SO-101 running the chained split-then-pick policies on four cubes.",
+        "w": 1280,
+        "h": 720
+      }
+    ],
+    "links": [
+      {
+        "label": "Squint paper",
+        "url": "https://arxiv.org/abs/2602.21203"
+      },
+      {
+        "label": "Video code",
+        "url": "https://github.com/osammotg/squint-video"
+      }
+    ],
+    "explainer": {
+      "src": "/projects/squint-rl/linkedin-explainer.mp4",
+      "poster": "/projects/squint-rl/linkedin-explainer-poster.jpg",
+      "caption": "The explainer video I made for LinkedIn: the three tasks, sim-to-real, and the night it finally worked."
+    },
+    "rows": [
+      1
+    ]
+  },
+  {
+    "id": "mimic-video",
+    "title": "ETHRC robot-learning stack and the mimic-video pipeline",
+    "when": "Spring 2026 · ETH Robotics Club",
+    "role": "Robot Learning team",
+    "paragraph": "At the ETH Robotics Club I work on the robot-learning team's bimanual YAMS stack. I raised the teleop control loop from about 30 Hz to 120 Hz with cProfile and multithreading, fixed a bug that read the 7 joints twice per observation, and tuned the leader-arm USB latency timer to 1 ms. I then designed POLARIS, the team's data foundation: validate YAMS episodes, convert them to a canonical format and build reproducible train/val/test splits, failing rather than inventing data. The team now trains on 863 curated demos across 9 datasets, and a fast data pipeline cut data loading from 110 ms to 9 ms per step. On top of this pipeline the team started fine-tuning Cosmos on our own YAMS bimanual data and is lining up the IDM training loop from mimic-video.",
+    "claims": [
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c11",
+      "c12",
+      "c19",
+      "c20"
+    ],
+    "stats": [
+      {
+        "value": "120 Hz",
+        "label": "teleop loop, up from 30 Hz"
+      },
+      {
+        "value": "863",
+        "label": "curated bimanual demos"
+      },
+      {
+        "value": "9 ms",
+        "label": "per-step data load, down from 110 ms"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/mimic-video/teleop-stack.jpg",
+        "kind": "image",
+        "caption": "The YAMS bimanual teleop stack: leader and follower arms, wrist cameras, topdown camera.",
+        "w": 1200,
+        "h": 1600
+      },
+      {
+        "src": "/projects/act-policies/towel-folding.mp4",
+        "kind": "video",
+        "caption": "Deployed ACT policy folding a towel on the ETHRC table.",
+        "w": 720,
+        "h": 1280
+      },
+      {
+        "src": "/projects/act-policies/carton-box.mp4",
+        "kind": "video",
+        "caption": "Deployed ACT policy putting a GPU ventilator into a carton box and closing it.",
+        "w": 720,
+        "h": 1280
+      }
+    ],
+    "links": [
+      {
+        "label": "mimic-video paper",
+        "url": "https://arxiv.org/abs/2512.15692"
+      },
+      {
+        "label": "yams-robot-server",
+        "url": "https://github.com/ETHRoboticsClub/yams-robot-server"
+      }
+    ],
+    "rows": [
+      3
+    ],
+    "rowHeight": 480
+  },
+  {
+    "id": "act-policies",
+    "hidden": true,
+    "title": "Towel folding and carton box: deployed ACT policies",
+    "when": "Spring 2026 · ETH Robotics Club",
+    "role": "Robot Learning team",
+    "paragraph": "On the club's YAMS bimanual robot we run two ACT policies autonomously: towel folding, and putting a GPU ventilator into a carton box and closing it. ACT predicts k=100 future joint positions at once, a 2 s horizon at 50 Hz, with a CVAE encoder (latent_dim 32) and temporal ensembling over overlapping chunks. I trained it on bimanual data from 863 curated demos across 9 datasets, 347 towel and 516 carton-box. The hardest part was the lab's lighting, which swings from night with all overhead lights on to daytime sun with the lab lights off. I trained against an augmentation matrix of color jitter, gaussian noise, gaussian blur, random erasing and random affine, and sweeps across about 50 job configs showed which augs actually transferred to the deployed policy. We also disable autofocus on all cameras, because it adds non-deterministic visual noise to ACT datasets.",
+    "claims": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10"
+    ],
+    "stats": [
+      {
+        "value": "2",
+        "label": "ACT policies deployed on YAMS"
+      },
+      {
+        "value": "347",
+        "label": "towel-folding demos"
+      },
+      {
+        "value": "~50",
+        "label": "job configs swept for augmentation"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/act-policies/towel-folding.mp4",
+        "kind": "video",
+        "caption": "Deployed ACT policy folding a towel on the ETHRC table.",
+        "w": 720,
+        "h": 1280
+      },
+      {
+        "src": "/projects/act-policies/carton-box.mp4",
+        "kind": "video",
+        "caption": "Deployed ACT policy putting a GPU ventilator into a carton box and closing it.",
+        "w": 720,
+        "h": 1280
+      }
+    ],
+    "links": [
+      {
+        "label": "ACT paper",
+        "url": "https://arxiv.org/abs/2304.13705"
+      }
+    ],
+    "rows": [
+      2
+    ],
+    "rowHeight": 480
+  },
+  {
+    "id": "humanoid",
+    "title": "The ETHRC humanoid",
+    "when": "2026 · ETH Robotics Club",
+    "role": "Club project",
+    "paragraph": "Next to my own bimanual work, I am part of the ETH Robotics Club while it builds its own humanoid, ETHRC humanoid revision 1, next to Unitree G1 models in the same description repo, and we recently started making him walk. The runtime, Argos, treats the robot as an appliance: a Robot API server with joint control, safety supervision and device services, where hardware and simulation share the same contracts. The hardware layer talks EtherCAT, Unitree and hand adapters, simulation runs in MuJoCo through humanoid-sim, and policies train in Isaac Lab on Newton's MJWarp or Kamino solver, with curricula, randomization and every policy evaluation kept in the learning repo.",
+    "claims": [
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c8",
+      "c9",
+      "c10",
+      "c12",
+      "c13"
+    ],
+    "stats": [
+      {
+        "value": "Argos",
+        "label": "robot runtime"
+      },
+      {
+        "value": "Isaac Lab",
+        "label": "policy training"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/humanoid/humanoid-walking.mp4",
+        "kind": "video",
+        "caption": "The ETHRC humanoid walking in the club hangar, recently started.",
+        "w": 1280,
+        "h": 720
+      },
+      {
+        "src": "/projects/humanoid/ethrc-humanoid.jpg",
+        "kind": "image",
+        "caption": "The ETHRC humanoid on its gantry under the ETH Robotics Club banner.",
+        "w": 718,
+        "h": 1400
+      }
+    ],
+    "links": [
+      {
+        "label": "Club humanoid docs",
+        "url": "https://docs.ethrobotics.ch/"
+      }
+    ],
+    "rows": [
+      2
+    ]
+  },
+  {
+    "id": "pdm",
+    "title": "Spaceship trajectories and highway merging",
+    "when": "Autumn 2024 · ETH Planning & Decision Making for Autonomous Robots",
+    "role": "Group exercises",
+    "paragraph": "Planning & Decision Making for Autonomous Robots was my first ETH semester, and I finished with a 6.0. In the spaceship exercise our group planned trajectories with controllable thrust while dodging a planet and its satellites with a docking goal. We solved it with sequential convexification (SCvx) in CVXPY: each convex subproblem goes to ECOS, the trust region is updated by a factor of 3.2, the loop is capped at 50 iterations, and the nonlinear dynamics are discretised with zero-order and first-order hold. The final graded exercise was lane-change planning and control for an autonomous vehicle among human-driven traffic on real highway scenarios, sensed by a 360-degree 2D lidar. We built the stack by hand, with gap checks before a lane change, wall-of-cars detection, a PID steering controller and a PD controller tracking a 13 m/s reference speed.",
+    "claims": [
+      "c1",
+      "c2",
+      "c3",
+      "c4",
+      "c5",
+      "c6",
+      "c7",
+      "c9",
+      "c10",
+      "c11",
+      "c12",
+      "c13",
+      "c14"
+    ],
+    "stats": [
+      {
+        "value": "6.0",
+        "label": "course grade"
+      },
+      {
+        "value": "50",
+        "label": "SCvx iterations max"
+      },
+      {
+        "value": "360°",
+        "label": "lidar field of view"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/pdm/lane-merge-scenario.jpg",
+        "kind": "image",
+        "caption": "Highway merge scenario rendered in our lane-change exercise repo.",
+        "w": 1200,
+        "h": 1028
+      },
+      {
+        "src": "/projects/pdm/spaceship-scenario.jpg",
+        "kind": "image",
+        "caption": "Course environment for the spaceship exercise: a planet, its satellites and the docking goal.",
+        "w": 930,
+        "h": 576
+      }
+    ],
+    "rows": [
+      2
+    ]
+  },
+  {
+    "id": "vo",
+    "title": "Monocular visual odometry from scratch",
+    "when": "Autumn 2024 · Vision Algorithms for Mobile Robotics (Prof. Davide Scaramuzza)",
+    "role": "Group mini-project",
+    "paragraph": "In Davide Scaramuzza's Vision Algorithms for Mobile Robotics course, my group built a monocular visual odometry pipeline for the VAMR mini-project that runs on the Parking, Malaga, KITTI and Malaga roundabout datasets. Bootstrap initialisation detects Shi-Tomasi or Harris corners, tracks them with pyramidal KLT and estimates the essential matrix with RANSAC. In continuous operation the pipeline tracks landmarks with KLT, estimates each pose with PnP-RANSAC and triangulates new candidate landmarks once the bearing angle is large enough. My share was the 3D-3D correspondences problem, the visualization, debugging and the report, including a live dashboard that plots ground-truth poses and inliers and outliers. Parameters were tuned per dataset; on Parking the pipeline uses 500 Harris corners in continuous mode.",
+    "claims": [
+      "v1",
+      "v2",
+      "v3",
+      "v4",
+      "v5",
+      "v6",
+      "v7"
+    ],
+    "stats": [
+      {
+        "value": "500",
+        "label": "Harris corners in continuous mode (Parking)"
+      },
+      {
+        "value": "PnP-RANSAC",
+        "label": "pose estimation"
+      },
+      {
+        "value": "KLT",
+        "label": "pyramidal feature tracking"
+      }
+    ],
+    "media": [
+      {
+        "src": "/projects/vo/vo-parking-dashboard.mp4",
+        "kind": "video",
+        "caption": "Our pipeline re-run on the Parking sequence: KLT feature tracks, recent poses, tracked landmarks and the full trajectory against ground truth.",
+        "w": 1000,
+        "h": 800
+      }
+    ],
+    "links": [
+      {
+        "label": "Code",
+        "url": "https://github.com/RiccardoBianco/monocular-visual-odometry"
+      }
+    ]
+  }
+]

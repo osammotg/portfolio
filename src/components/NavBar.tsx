@@ -5,6 +5,16 @@ import './Navbar.css';
 import netflixLogo from '../images/logo-2.png';
 import blueImage from '../images/blue.png';
 
+// On the general research page the nav jumps within the page instead of
+// sending a professor off to the rest of the portfolio.
+const RESEARCH_ROUTES = ['/research', '/research/robotics', '/research/stanford'];
+const RESEARCH_ANCHORS = [
+  { id: 'projects', label: 'Projects' },
+  { id: 'journey', label: 'Journey' },
+  { id: 'research', label: 'Research' },
+  { id: 'contact', label: 'Contact' },
+];
+
 const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,6 +39,14 @@ const Navbar: React.FC = () => {
     setIsSidebarOpen(false);
   };
 
+  const isResearch = RESEARCH_ROUTES.includes(location.pathname.replace(/\/$/, ''));
+  const jumpTo = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    closeSidebar();
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' });
+  };
+
   return (
     <>
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
@@ -36,6 +54,13 @@ const Navbar: React.FC = () => {
           <Link to="/" className="navbar-logo">
             <img src={netflixLogo} alt="Netflix" />
           </Link>
+          {isResearch ? (
+            <ul className="navbar-links">
+              {RESEARCH_ANCHORS.map(({ id, label }) => (
+                <li key={id}><a href={`#${id}`} onClick={jumpTo(id)}>{label}</a></li>
+              ))}
+            </ul>
+          ) : (
           <ul className="navbar-links">
             <li><Link to="/browse">Home</Link></li>
             <li><Link to="/experience">Experience</Link></li>
@@ -45,6 +70,7 @@ const Navbar: React.FC = () => {
             <li><Link to="/skills">Skills</Link></li>
             <li><Link to="/contact-me">Contact Me</Link></li>
           </ul>
+          )}
         </div>
         <div className="navbar-right">
           {/* Hamburger menu for mobile */}
@@ -65,6 +91,13 @@ const Navbar: React.FC = () => {
         <div className="sidebar-logo">
           <img src={netflixLogo} alt="Netflix Logo" />
         </div>
+        {isResearch ? (
+          <ul>
+            {RESEARCH_ANCHORS.map(({ id, label }) => (
+              <li key={id}><a href={`#${id}`} onClick={jumpTo(id)}>{label}</a></li>
+            ))}
+          </ul>
+        ) : (
         <ul>
           <li><Link to="/browse" onClick={closeSidebar}><FaHome /> Home</Link></li>
           <li><Link to="/experience" onClick={closeSidebar}><FaBriefcase /> Experience</Link></li>
@@ -74,6 +107,7 @@ const Navbar: React.FC = () => {
           <li><Link to="/skills" onClick={closeSidebar}><FaTools /> Skills</Link></li>
           <li><Link to="/contact-me" onClick={closeSidebar}><FaEnvelope /> Contact Me</Link></li>
         </ul>
+        )}
       </div>
     </>
   );

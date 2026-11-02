@@ -25,6 +25,8 @@ const App: React.FC = () => {
       <Route path="/" element={<NetflixTitle />} />
       <Route path="/browse" element={<Browse />} />
       <Route path="/research/mees" element={<Layout><MeesPage /></Layout>} />
+      <Route path="/research/robotics" element={<Layout><ResearchPage /></Layout>} />
+      <Route path="/research/stanford" element={<Layout><ResearchPage /></Layout>} />
       <Route path="/research" element={<Layout><ResearchPage /></Layout>} />
       <Route path="/profile/:profileName" element={<Layout><ProfilePage /></Layout>} />
       <Route path="/work-permit" element={<Layout><WorkPermit /></Layout>} />
